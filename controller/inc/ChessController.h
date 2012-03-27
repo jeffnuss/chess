@@ -7,6 +7,7 @@
 
 #include "IChessController.h"
 #include "IChessView.h"
+#include "Facade.h"
 
 #ifndef CHESSCONTROLLER_H_
 #define CHESSCONTROLLER_H_
@@ -30,7 +31,8 @@ public:
 	void SetView(IChessView* view);
 
 private:
-	IChessView * view;
+	IChessView * viewPtr;
+	Facade * facadePtr;
 
 };
 

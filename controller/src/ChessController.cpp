@@ -6,17 +6,16 @@
  */
 
 #include "../inc/ChessController.h"
-#include <iostream>
 
 ChessController::ChessController()
 {
-	// TODO Auto-generated constructor stub
+	facadePtr = new Facade();
 
 }
 
 ChessController::~ChessController()
 {
-	delete view;
+	delete facadePtr;
 }
 
 void ChessController::on_CellSelected(int row, int col, int button)
@@ -38,20 +37,28 @@ void ChessController::on_NewGame()
 {
 	for (int i = 0; i < 8; i++)
 	{
-		view->PlacePiece(1, i, B_PAWN);
-		view->PlacePiece(6, i, W_PAWN);
+		viewPtr->PlacePiece(1, i, B_PAWN);
+		viewPtr->PlacePiece(6, i, W_PAWN);
 	}
 
-	view->PlacePiece(0, 1, B_KNIGHT);
-	view->PlacePiece(7, 1, W_KNIGHT);
-	view->PlacePiece(0, 6, B_KNIGHT);
-	view->PlacePiece(7, 6, W_KNIGHT);
+	viewPtr->PlacePiece(0, 0, B_ROOK);
+	viewPtr->PlacePiece(7, 0, W_ROOK);
+	viewPtr->PlacePiece(0, 7, B_ROOK);
+	viewPtr->PlacePiece(7, 7, W_ROOK);
+	viewPtr->PlacePiece(0, 1, B_KNIGHT);
+	viewPtr->PlacePiece(7, 1, W_KNIGHT);
+	viewPtr->PlacePiece(0, 6, B_KNIGHT);
+	viewPtr->PlacePiece(7, 6, W_KNIGHT);
+	viewPtr->PlacePiece(0, 2, B_BISHOP);
+	viewPtr->PlacePiece(7, 2, W_BISHOP);
+	viewPtr->PlacePiece(0, 5, B_BISHOP);
+	viewPtr->PlacePiece(7, 5, W_BISHOP);
+	viewPtr->PlacePiece(0, 3, B_QUEEN);
+	viewPtr->PlacePiece(7, 3, W_QUEEN);
+	viewPtr->PlacePiece(0, 4, B_KING);
+	viewPtr->PlacePiece(7, 4, W_KING);
 
-	for (int i = 0; i < 2; i++)
-	{
-		view->PlacePiece(1, i, B_ROOK);
-		view->PlacePiece(6, i, W_ROOK);
-	}
+	facadePtr->NewGame();
 }
 
 void ChessController::on_SaveGame()
@@ -86,5 +93,5 @@ void ChessController::on_TimerEvent()
 
 void ChessController::SetView(IChessView* view)
 {
-	this->view = view;
+	this->viewPtr = view;
 }
