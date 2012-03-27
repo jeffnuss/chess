@@ -1,4 +1,4 @@
-bin/
-model/obj
-view/obj
-controller/obj
+bin/*
+model/obj/*
+view/obj/*
+controller/obj/*
