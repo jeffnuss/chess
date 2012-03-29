@@ -5,6 +5,8 @@
  *      Author: jnuss
  */
 
+#include <vector>
+
 #ifndef BOARD_H_
 #define BOARD_H_
 
@@ -13,6 +15,9 @@ public:
 	Board();
 	~Board();
 	void Reset();
+
+private:
+	std::vector< std::vector <int> > * boardArray;
 };
 
 #endif /* BOARD_H_ */

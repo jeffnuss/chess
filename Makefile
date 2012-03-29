@@ -68,6 +68,9 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 # This macro should be used to store all of the object files created 
 # from *your* source files
 MY_OBJS =  $(CONT_OBJ)ChessController.o \
+	$(MODEL_OBJ)Facade.o \
+	$(MODEL_OBJ)Board.o \
+	$(MODEL_OBJ)Piece.o
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -147,10 +150,17 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 ################################################################################
 # Targets for YOUR object files...
 
-$(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h
+$(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h $(MODEL_INC)Facade.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
 
+$(MODEL_OBJ)Board.o: $(MODEL_SRC)Board.cpp $(MODEL_INC)Board.h $(MODEL_INC)Piece.h
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Board.o -c $(LOG_FLAG) $(MODEL_SRC)Board.cpp
 
+$(MODEL_OBJ)Facade.o: $(MODEL_SRC)Facade.cpp $(MODEL_INC)Board.h
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Facade.o -c $(LOG_FLAG) $(MODEL_SRC)Facade.cpp
+
+$(MODEL_OBJ)Facade.o: $(MODEL_SRC)Piece.cpp $(MODEL_INC)Piece.h
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Piece.o -c $(LOG_FLAG) $(MODEL_SRC)Piece.cpp
 
 ################################################################################
 # Targets for GUI-related object files

@@ -7,16 +7,19 @@
 
 #include "../inc/Board.h"
 
-Board::Board() {
-	// TODO Auto-generated constructor stub
-
+Board::Board() 
+{
+	this->Reset();
 }
 
-Board::~Board() {
+Board::~Board() 
+{
 	// TODO Auto-generated destructor stub
 }
 
 void Board::Reset()
 {
-
+	for (int i = 0; i < 7; i++)
+	{
+	}
 }

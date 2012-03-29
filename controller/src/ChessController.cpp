@@ -9,8 +9,7 @@
 
 ChessController::ChessController()
 {
-	facadePtr = new Facade();
-
+	facadePtr = new Facade;
 }
 
 ChessController::~ChessController()

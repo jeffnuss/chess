@@ -7,12 +7,14 @@
 
 #include "../inc/Facade.h"
 
-Facade::Facade() {
+Facade::Facade()
+{
 	// TODO Auto-generated constructor stub
 
 }
 
-Facade::~Facade() {
+Facade::~Facade()
+{
 	// TODO Auto-generated destructor stub
 }
 
