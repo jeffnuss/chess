@@ -49,11 +49,16 @@ VIEW_OBJ = view/obj/
 CONT_SRC = controller/src/
 CONT_INC = controller/inc/
 CONT_OBJ = controller/obj/
+TEST_SRC = test/src/
+TEST_INC = test/inc/
+TEST_OBJ = test/obj/
 EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
+TEST = bin/tester
+LIB = lib/libChessGui.so
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC)
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I$(TEST_INC)
 DEBUG = -g # Uncomment this if you want to compile with debug info
 
 # Uncomment the flag on this next line to turn off the logging messages from the
@@ -71,6 +76,8 @@ MY_OBJS =  $(CONT_OBJ)ChessController.o \
 	$(MODEL_OBJ)Facade.o \
 	$(MODEL_OBJ)Board.o \
 	$(MODEL_OBJ)Piece.o
+
+TEST_O = $(TEST_OBJ)Tester.o
 
 # These are all the object files that go into the library
 LIB_OBJS = $(VIEW_OBJ)ChessView.o \
@@ -90,7 +97,11 @@ LIB_OBJS = $(VIEW_OBJ)ChessView.o \
 run: $(EXE)
 	$(EXE)
 
+test: $(TEST)
+	$(TEST)
+
 bin: $(EXE)
+lib: $(LIB)
 
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  
@@ -104,9 +115,11 @@ clean:
 	@rm -f $(MODEL_OBJ)*.o
 	@rm -f $(VIEW_OBJ)*.o
 	@rm -f $(CONT_OBJ)*.o
+	@rm -f $(TEST_OBJ)*.o
 	@rm -f $(EXE)
 	@rm -f $(MEXE)
-
+	@rm -f $(TEST)
+	@rm -f $(LIB)
 
 ################################################################################
 # Targets for executables and main object files
@@ -125,24 +138,33 @@ clean:
 # the executable should be dependent on, and link in the library file, not the 
 # .o files! That means, instead of linking in $(LIB_OBJS) below, you should link
 # in the actual library file.
-$(EXE): $(MAIN_O) $(MY_OBJS) $(LIB_OBJS)
+$(EXE): $(MAIN_O) $(MY_OBJS) $(LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) $(LIB_OBJS) $(CFLAGS) $(LIBS)
+	g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) $(CFLAGS) $(LIBS) $(LIB)
 	chmod ugo+x $(EXE)
 
 # Executable for memory testing
-$(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(LIB_OBJS)
+
+$(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) $(LIB_OBJS) $(CFLAGS) $(LIBS)
+	g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) $(CFLAGS) $(LIBS) $(LIB)
 	chmod ugo+x $(MEXE)
 	
+# Executable for normal testing
+$(TEST): $(TEST_O) $(MY_OBJS) $(LIB)
+	g++ $(INCLUDES) -o $(TEST) $(TEST_O) $(MY_OBJS) $(CFLAGS) $(LIBS) $(LIB)
+	chmod ugo+x $(TEST)
+
+# Library object file
+$(LIB): $(LIB_OBJS)
+	g++ -shared -o $(LIB) $(LIB_OBJS)
 
 # Main object file
-$(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h
+$(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(LIB)
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 # Main .o for memory testing
-$(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h
+$(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(LIB)
 	g++ -DMEMCHECK $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MEMMAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 
@@ -150,16 +172,19 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 ################################################################################
 # Targets for YOUR object files...
 
+$(TEST_OBJ)Tester.o: $(TEST_SRC)Tester.cpp $(LIB)
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(TEST_O) -c $(LOG_FLAG) $(TEST_SRC)Tester.cpp
+
 $(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h $(MODEL_INC)Facade.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
 
-$(MODEL_OBJ)Board.o: $(MODEL_SRC)Board.cpp $(MODEL_INC)Board.h $(MODEL_INC)Piece.h
+$(MODEL_OBJ)Board.o: $(MODEL_SRC)Board.cpp $(MODEL_INC)Board.h 
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Board.o -c $(LOG_FLAG) $(MODEL_SRC)Board.cpp
 
-$(MODEL_OBJ)Facade.o: $(MODEL_SRC)Facade.cpp $(MODEL_INC)Board.h
+$(MODEL_OBJ)Facade.o: $(MODEL_SRC)Facade.cpp $(MODEL_INC)Facade.h $(MODEL_INC)Board.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Facade.o -c $(LOG_FLAG) $(MODEL_SRC)Facade.cpp
 
-$(MODEL_OBJ)Facade.o: $(MODEL_SRC)Piece.cpp $(MODEL_INC)Piece.h
+$(MODEL_OBJ)Piece.o: $(MODEL_SRC)Piece.cpp $(MODEL_INC)Piece.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Piece.o -c $(LOG_FLAG) $(MODEL_SRC)Piece.cpp
 
 ################################################################################

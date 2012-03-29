@@ -2,3 +2,5 @@ bin/*
 model/obj/*
 view/obj/*
 controller/obj/*
+lib/*
+test/obj/Tester.o
