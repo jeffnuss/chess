@@ -12,8 +12,6 @@ using namespace std;
 #include "SelectDialog.h"
 #include "ChessView.h"
 
-#include "IChessController.h"
-
 
 ChessView::ChessView(std::string gladefile):gui(0),logId(0)
 {

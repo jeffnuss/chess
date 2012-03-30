@@ -52,10 +52,16 @@ CONT_OBJ = controller/obj/
 TEST_SRC = test/src/
 TEST_INC = test/inc/
 TEST_OBJ = test/obj/
+DATA_SRC = data/src/
+DATA_INC = data/inc/
+DATA_OBJ = data/obj/
 EXE = bin/chess			# normal executable
 MEXE = bin/mchess			# executable for memory testing
 TEST = bin/tester
 LIB = lib/libChessGui.so
+
+MODEL_SOURCES = $(foreach file, $(shell ls model/src/*.cpp), $(basename $(notdir $(file))))
+DATA_SOURCES = $(foreach file, $(shell ls data/src/*.cpp), $(basename $(notdir $(file)))) 
 
 # Macros for compilation flags
 INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I$(TEST_INC)
@@ -94,21 +100,21 @@ LIB_OBJS = $(VIEW_OBJ)ChessView.o \
 ################################################################################
 # Pseudo-targets
 
-run: $(EXE)
+run: $(EXE) 
 	$(EXE)
 
 test: $(TEST)
 	$(TEST)
 
-bin: $(EXE)
-lib: $(LIB)
+bin: $(EXE) 
+lib: $(LIB) 
 
 # Run the executable for memory testing
 # Instructions: Edit the command below so that it runs the  
 # memory-check executable in Human-Human mode (i.e., add necessary command  
 # line arguments to the end of valgrind the command below).	
 memcheck: $(MEXE)
-	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) #command-line args go here
+	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) hh
 
 # Clean removes all of the .o files, libraries, and executables
 clean:
@@ -172,20 +178,22 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 ################################################################################
 # Targets for YOUR object files...
 
+depend: depend.mk
+	@-rm depend.mk
+	@for f in $(MODEL_SOURCES) ; do g++ -MM -MT $(MODEL_OBJ)$$f.o -I $(MODEL_INC) $(MODEL_SRC)$$f.cpp >> depend.mk; done
+	@for f in $(DATA_SOURCES) ; do g++ -MM -MT $(DATA_OBJ)$$f.o -I $(DATA_INC) $(DATA_SRC)$$f.cpp >> depend.mk; done
+	@g++ -MM -MT $(CONT_OBJ)ChessController.o -I $(CONT_INC) $(CONT_SRC)ChessController.cpp >> depend.mk
+
 $(TEST_OBJ)Tester.o: $(TEST_SRC)Tester.cpp $(LIB)
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(TEST_O) -c $(LOG_FLAG) $(TEST_SRC)Tester.cpp
-
+	
+$(MODEL_OBJ)%.o : $(MODEL_SRC)%.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -c $(LOG_FLAG) -o $@ $<
+	
 $(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h $(MODEL_INC)Facade.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
 
-$(MODEL_OBJ)Board.o: $(MODEL_SRC)Board.cpp $(MODEL_INC)Board.h 
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Board.o -c $(LOG_FLAG) $(MODEL_SRC)Board.cpp
-
-$(MODEL_OBJ)Facade.o: $(MODEL_SRC)Facade.cpp $(MODEL_INC)Facade.h $(MODEL_INC)Board.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Facade.o -c $(LOG_FLAG) $(MODEL_SRC)Facade.cpp
-
-$(MODEL_OBJ)Piece.o: $(MODEL_SRC)Piece.cpp $(MODEL_INC)Piece.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MODEL_OBJ)Piece.o -c $(LOG_FLAG) $(MODEL_SRC)Piece.cpp
+include depend.mk
 
 ################################################################################
 # Targets for GUI-related object files
@@ -209,4 +217,3 @@ $(VIEW_OBJ)ChessGuiImages.o: $(VIEW_SRC)ChessGuiImages.cpp $(VIEW_INC)ChessGuiIm
 
 $(VIEW_OBJ)SelectDialog.o: $(VIEW_SRC)SelectDialog.cpp
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)SelectDialog.o -c -fPIC $(VIEW_SRC)SelectDialog.cpp
-

@@ -1,7 +1,7 @@
 #ifndef I_CHESS_CONTROLLER_H
 #define I_CHESS_CONTROLLER_H
 
-#include "IChessView.h"
+#include "../../view/inc/IChessView.h"
 
 class IChessController
 {

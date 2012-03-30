@@ -6,8 +6,8 @@
  */
 
 #include "IChessController.h"
-#include "IChessView.h"
-#include "Facade.h"
+#include "../../view/inc/IChessView.h"
+#include "../../model/inc/Facade.h"
 
 #ifndef CHESSCONTROLLER_H_
 #define CHESSCONTROLLER_H_

@@ -5,8 +5,6 @@
  *      Author: jnuss
  */
 
-#include <set>
-
 #ifndef PIECE_H_
 #define PIECE_H_
 

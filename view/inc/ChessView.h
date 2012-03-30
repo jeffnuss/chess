@@ -22,7 +22,7 @@
 #include "ChessGuiDefines.h"
 #include "ChessGui.h"
 #include "IChessView.h"
-#include "IChessController.h"
+#include "../../controller/inc/IChessController.h"
 
 
 ///@def LOG_LEVEL_HIDE_MASK

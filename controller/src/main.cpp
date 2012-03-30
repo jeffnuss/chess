@@ -9,8 +9,8 @@
 
 #include <gtkmm/main.h>
 #include <glib.h>
-#include "ChessGuiImages.h"
-#include "ChessView.h"
+#include "../../view/inc/ChessGuiImages.h"
+#include "../../view/inc/ChessView.h"
 #include "IChessController.h"
 #include "ChessController.h"
 
