@@ -5,7 +5,10 @@
  *      Author: jnuss
  */
 
+#include <set>
+
 #include "Board.h"
+#include "BoardPosition.h"
 
 #ifndef FACADE_H_
 #define FACADE_H_
@@ -15,6 +18,7 @@ public:
 	Facade();
 	~Facade();
 	void NewGame();
+	std::set<BoardPosition> getValidMoves(const BoardPosition &) const;
 
 private:
 	Board * boardPtr;

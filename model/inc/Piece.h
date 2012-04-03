@@ -28,6 +28,7 @@ public:
 	virtual int GetType();
 	virtual int GetColor();
 	bool operator==(const Piece &) const;
+	Piece & operator=(const Piece &);
 
 private:
 	int pieceType;

@@ -81,7 +81,8 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 MY_OBJS =  $(CONT_OBJ)ChessController.o \
 	$(MODEL_OBJ)Facade.o \
 	$(MODEL_OBJ)Board.o \
-	$(MODEL_OBJ)Piece.o
+	$(MODEL_OBJ)Piece.o \
+	$(MODEL_OBJ)Pawn.o
 
 TEST_O = $(TEST_OBJ)Tester.o
 
@@ -104,6 +105,7 @@ run: $(EXE)
 	$(EXE)
 
 test: $(TEST)
+	ulimit -c unlimited
 	$(TEST)
 
 bin: $(EXE) 

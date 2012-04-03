@@ -19,7 +19,6 @@ ChessController::~ChessController()
 
 void ChessController::on_CellSelected(int row, int col, int button)
 {
-
 }
 
 void ChessController::on_DragStart(int row,int col)

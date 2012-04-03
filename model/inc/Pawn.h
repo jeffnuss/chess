@@ -15,6 +15,7 @@ class Pawn : public Piece
 public:
 	Pawn(int, int);
 	~Pawn();
+	bool operator==(const Pawn &) const;
 };
 
 #endif /* PAWN_H_ */

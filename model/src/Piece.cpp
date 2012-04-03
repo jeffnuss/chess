@@ -32,3 +32,10 @@ bool Piece::operator==(const Piece & other) const
 {
 	return (other.pieceType == this->pieceType && other.pieceColor == this->pieceColor);
 }
+
+Piece& Piece::operator =(const Piece & pieceToAssign)
+{
+	this->pieceColor = pieceToAssign.pieceColor;
+	this->pieceType = pieceToAssign.pieceType;
+	return *this;
+}

@@ -7,19 +7,25 @@
 
 #include "../inc/Facade.h"
 
+using namespace std;
+
 Facade::Facade()
 {
-	// TODO Auto-generated constructor stub
-
+	boardPtr = new Board;
 }
 
 Facade::~Facade()
 {
-	// TODO Auto-generated destructor stub
+	delete boardPtr;
 }
 
 void Facade::NewGame()
 {
 	boardPtr->Reset();
+}
+
+set<BoardPosition> Facade::getValidMoves(const BoardPosition & positionToCheck) const
+{
+
 }
 

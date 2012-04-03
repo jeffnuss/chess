@@ -22,7 +22,7 @@ public:
 
 private:
 //	std::vector< std::vector <Piece> > boardArray;
-	Piece (* boardArray)[8];
+	Piece * (* boardArray)[8];
 };
 
 #endif /* BOARD_H_ */
