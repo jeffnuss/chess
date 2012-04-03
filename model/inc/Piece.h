@@ -11,11 +11,23 @@
 class Piece
 {
 public:
+
+	enum PieceType
+	{
+		PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING
+	};
+
+	enum PieceColor
+	{
+		WHITE, BLACK
+	};
+
 	Piece();
 	Piece(int, int);
 	virtual ~Piece();
 	virtual int GetType();
 	virtual int GetColor();
+	bool operator==(const Piece &) const;
 
 private:
 	int pieceType;

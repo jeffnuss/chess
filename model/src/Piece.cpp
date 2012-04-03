@@ -27,3 +27,8 @@ int Piece::GetColor()
 {
 	return pieceColor;
 }
+
+bool Piece::operator==(const Piece & other) const
+{
+	return (other.pieceType == this->pieceType && other.pieceColor == this->pieceColor);
+}

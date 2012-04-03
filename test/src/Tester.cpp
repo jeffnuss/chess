@@ -5,9 +5,22 @@
  *      Author: jnuss
  */
 
-#include <iostream>
+#include "Board.h"
+
+using namespace std;
 
 int main()
 {
-	std::cout << "testing the test";
+	bool success = true;
+
+	if (!Board::Test(cout)) success = false;
+
+	if (success) {
+		cout << "Tests Succeeded!" << endl;
+	}
+	else {
+		cout << "Tests Failed!" << endl;
+	}
+
+	return 0;
 }
