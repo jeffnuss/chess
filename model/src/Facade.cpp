@@ -26,6 +26,24 @@ void Facade::NewGame()
 
 set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck) const
 {
+	Piece pieceToCheck = boardPtr->GetPiece(positionToCheck);
+	unordered_set possibleMoves;
+	if (pieceToCheck != NULL)
+	{
+		possibleMoves = pieceToCheck.GetLegalMoves();
+		CheckForCheck(possibleMoves);
+		CheckForCheckMate(possibleMoves);
+	}
 
+	return possibleMoves;
 }
 
+void CheckForCheck(BoardPosition & positionToCheck) const
+{
+	
+}
+
+void CheckForCheckMate(BBoardPosition & positionToCheck) const
+{
+
+}

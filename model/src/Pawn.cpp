@@ -29,6 +29,15 @@ unordered_set<BoardPosition> Pawn::GetLegalMoves(const BoardPosition & currentPi
 		 tempPos.MoveDown();
 		 legalMoves.insert(tempPos);
 		 tempPos.MoveDown();
+		 legalMoves.insert(tempPos);
+	}
+	else if (currentPiecePosition.GetRow() == 6 && this->pieceColor == Piece::WHITE)
+	{
+		 BoardPosition tempPos = currentPiecePosition;
+		 tempPos.MoveUp();
+		 legalMoves.insert(tempPos);
+		 tempPos.MoveUp();
+		 legalMoves.insert(tempPos);
 	}
 
 	return legalMoves;

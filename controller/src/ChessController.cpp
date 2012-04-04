@@ -19,6 +19,12 @@ ChessController::~ChessController()
 
 void ChessController::on_CellSelected(int row, int col, int button)
 {
+	BoardPosition<unordered_set> possibleMoves = facadePtr->GetValidMoves(BoardPosition(row, col));
+	unordered_set::iterator iter = poossibleMoves.begin();
+	while (iter != possibleMoves.end())
+	{
+		viewPtr->HighlightSquare(iter.GetRow(), iter.GetCol(), BLUE_SQUARE);
+	}
 }
 
 void ChessController::on_DragStart(int row,int col)
