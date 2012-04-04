@@ -6,13 +6,93 @@
  */
 
 #include "../inc/BoardPosition.h"
+#include "../../test/inc/UnitTest.h"
 
-BoardPosition::BoardPosition() {
+using namespace std;
+
+BoardPosition::BoardPosition()
+{
 	// TODO Auto-generated constructor stub
 
 }
 
-BoardPosition::~BoardPosition() {
+BoardPosition::BoardPosition(int row, int col) : row(row), col(col)
+{
+}
+
+BoardPosition::BoardPosition(const BoardPosition & other)
+{
+	this->row = other.row;
+	this->col = other.col;
+}
+
+BoardPosition::~BoardPosition()
+{
 	// TODO Auto-generated destructor stub
 }
 
+int BoardPosition::GetRow() const
+{
+	return row;
+}
+
+int BoardPosition::GetCol() const
+{
+	return col;
+}
+
+bool BoardPosition::MoveUp()
+{
+	if (row > 0)
+	{
+		row--;
+		return true;
+	}
+
+	return false;
+}
+
+bool BoardPosition::MoveDown()
+{
+	if (row < 7)
+	{
+		row++;
+		return true;
+	}
+
+	return false;
+}
+
+bool BoardPosition::operator==(const BoardPosition & other) const
+{
+	return (this->col == other.col && this->row == other.row);
+}
+
+#ifndef NDEBUG
+bool BoardPosition::Test(std::ostream & os)
+{
+	bool success = true;
+
+	BoardPosition testBP(2, 3);
+
+	TEST(testBP.col == testBP.GetCol());
+	TEST(testBP.row == testBP.GetRow());
+
+	testBP.MoveDown();
+	TEST(testBP.GetRow() == 3);
+
+	testBP.MoveDown();
+	TEST(testBP.GetRow() == 4);
+
+	testBP.MoveUp();
+	TEST(testBP.GetRow() == 3);
+
+	testBP.MoveUp();
+	TEST(testBP.GetRow() == 2);
+
+	TEST(testBP == BoardPosition(2, 3));
+
+	return success;
+}
+
+#endif

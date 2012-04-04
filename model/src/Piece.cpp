@@ -6,6 +6,7 @@
  */
 
 #include "../inc/Piece.h"
+#include "Board.h"
 
 Piece::Piece(int pieceType, int pieceColor) : pieceType(pieceType), pieceColor(pieceColor)
 {

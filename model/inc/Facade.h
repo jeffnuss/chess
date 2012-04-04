@@ -18,7 +18,7 @@ public:
 	Facade();
 	~Facade();
 	void NewGame();
-	std::set<BoardPosition> getValidMoves(const BoardPosition &) const;
+	std::set<BoardPosition> GetValidMoves(const BoardPosition &) const;
 
 private:
 	Board * boardPtr;

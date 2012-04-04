@@ -71,6 +71,8 @@ DEBUG = -g # Uncomment this if you want to compile with debug info
 # GUI
 LOG_FLAG = #'-DLOG_LEVEL_HIDE_MASK=(G_LOG_LEVEL_DEBUG|G_LOG_LEVEL_INFO)'
 
+# c++0x flag
+AWESOMENESS_FLAG = -std=c++0x
 
 # There are two different main.o files. One is for memory testing.
 MAIN_O = $(CONT_OBJ)main.o
@@ -82,7 +84,8 @@ MY_OBJS =  $(CONT_OBJ)ChessController.o \
 	$(MODEL_OBJ)Facade.o \
 	$(MODEL_OBJ)Board.o \
 	$(MODEL_OBJ)Piece.o \
-	$(MODEL_OBJ)Pawn.o
+	$(MODEL_OBJ)Pawn.o \
+	$(MODEL_OBJ)BoardPosition.o
 
 TEST_O = $(TEST_OBJ)Tester.o
 
@@ -148,19 +151,19 @@ clean:
 # in the actual library file.
 $(EXE): $(MAIN_O) $(MY_OBJS) $(LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) $(CFLAGS) $(LIBS) $(LIB)
+	g++ $(INCLUDES) -o $(EXE) $(MAIN_O) $(MY_OBJS) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) $(LIB)
 	chmod ugo+x $(EXE)
 
 # Executable for memory testing
 
 $(MEXE): $(MEMMAIN_O) $(MY_OBJS) $(LIB)
 	@# Re-link executable. Again, this should link the library file, not the .o's
-	g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) $(CFLAGS) $(LIBS) $(LIB)
+	g++ $(INCLUDES) -o $(MEXE) $(MEMMAIN_O) $(MY_OBJS) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) $(LIB)
 	chmod ugo+x $(MEXE)
 	
 # Executable for normal testing
 $(TEST): $(TEST_O) $(MY_OBJS) $(LIB)
-	g++ $(INCLUDES) -o $(TEST) $(TEST_O) $(MY_OBJS) $(CFLAGS) $(LIBS) $(LIB)
+	g++ $(INCLUDES) -o $(TEST) $(TEST_O) $(MY_OBJS) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) $(LIB)
 	chmod ugo+x $(TEST)
 
 # Library object file
@@ -169,11 +172,11 @@ $(LIB): $(LIB_OBJS)
 
 # Main object file
 $(MAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(LIB)
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(MAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 # Main .o for memory testing
 $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessView.h $(LIB)
-	g++ -DMEMCHECK $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(MEMMAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
+	g++ -DMEMCHECK $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(MEMMAIN_O) -c $(LOG_FLAG) $(CONT_SRC)main.cpp
 
 
 
@@ -187,13 +190,13 @@ depend: depend.mk
 	@g++ -MM -MT $(CONT_OBJ)ChessController.o -I $(CONT_INC) $(CONT_SRC)ChessController.cpp >> depend.mk
 
 $(TEST_OBJ)Tester.o: $(TEST_SRC)Tester.cpp $(LIB)
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(TEST_O) -c $(LOG_FLAG) $(TEST_SRC)Tester.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(TEST_O) -c $(LOG_FLAG) $(TEST_SRC)Tester.cpp
 	
 $(MODEL_OBJ)%.o : $(MODEL_SRC)%.cpp
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -c $(LOG_FLAG) -o $@ $<
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -c $(LOG_FLAG) -o $@ $<
 	
 $(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h $(MODEL_INC)Facade.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
 
 include depend.mk
 
@@ -203,19 +206,19 @@ include depend.mk
 # so that they can be put into a shared library.
 
 $(VIEW_OBJ)ChessView.o: $(VIEW_SRC)ChessView.cpp $(VIEW_INC)SelectDialog.h $(VIEW_INC)ChessView.h $(CONT_INC)IChessController.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)ChessView.o -c -fPIC $(LOG_FLAG) $(VIEW_SRC)ChessView.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(VIEW_OBJ)ChessView.o -c -fPIC $(LOG_FLAG) $(VIEW_SRC)ChessView.cpp
 
 $(VIEW_OBJ)ChessGuiBoardCell.o: $(VIEW_SRC)ChessGuiBoardCell.cpp $(VIEW_INC)ChessGuiBoardCell.h $(VIEW_INC)ChessGuiImages.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)ChessGuiBoardCell.o -c -fPIC $(VIEW_SRC)ChessGuiBoardCell.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(VIEW_OBJ)ChessGuiBoardCell.o -c -fPIC $(VIEW_SRC)ChessGuiBoardCell.cpp
 
 $(VIEW_OBJ)ChessGuiBoard.o: $(VIEW_SRC)ChessGuiBoard.cpp $(VIEW_INC)ChessGuiBoard.h $(VIEW_INC)ChessGui.h $(VIEW_INC)ChessGuiImages.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)ChessGuiBoard.o -c -fPIC $(VIEW_SRC)ChessGuiBoard.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(VIEW_OBJ)ChessGuiBoard.o -c -fPIC $(VIEW_SRC)ChessGuiBoard.cpp
 
 $(VIEW_OBJ)ChessGui.o: $(VIEW_SRC)ChessGui.cpp $(VIEW_INC)ChessGui.h $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)SelectDialog.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)ChessGui.o -c -fPIC $(VIEW_SRC)ChessGui.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(VIEW_OBJ)ChessGui.o -c -fPIC $(VIEW_SRC)ChessGui.cpp
 
 $(VIEW_OBJ)ChessGuiImages.o: $(VIEW_SRC)ChessGuiImages.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)Inline.h
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)ChessGuiImages.o -c -fPIC $(VIEW_SRC)ChessGuiImages.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(VIEW_OBJ)ChessGuiImages.o -c -fPIC $(VIEW_SRC)ChessGuiImages.cpp
 
 $(VIEW_OBJ)SelectDialog.o: $(VIEW_SRC)SelectDialog.cpp
-	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(LIBS) -o $(VIEW_OBJ)SelectDialog.o -c -fPIC $(VIEW_SRC)SelectDialog.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(VIEW_OBJ)SelectDialog.o -c -fPIC $(VIEW_SRC)SelectDialog.cpp

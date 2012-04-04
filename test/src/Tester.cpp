@@ -6,6 +6,7 @@
  */
 
 #include "Board.h"
+#include "BoardPosition.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ int main()
 	bool success = true;
 
 	if (!Board::Test(cout)) success = false;
+	if (!BoardPosition::Test(cout)) success = false;
 
 	if (success) {
 		cout << "Tests Succeeded!" << endl;

@@ -24,7 +24,7 @@ void Facade::NewGame()
 	boardPtr->Reset();
 }
 
-set<BoardPosition> Facade::getValidMoves(const BoardPosition & positionToCheck) const
+set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck) const
 {
 
 }

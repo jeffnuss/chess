@@ -53,50 +53,55 @@ void Board::Reset()
 
 }
 
+Piece & Board::GetPiece(BoardPosition & positionToCheck) const
+{
+	return *boardArray[positionToCheck.GetRow()][positionToCheck.GetCol()];
+}
+
 #ifndef NDEBUG
-    bool Board::Test(std::ostream & os)
-    {
-    	bool success = true;
+bool Board::Test(std::ostream & os)
+{
+	bool success = true;
 
-    	Board testBoard;
+	Board testBoard;
 
-    	testBoard.Reset();
+	testBoard.Reset();
 
-    	TEST(testBoard.boardArray[1][0]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][0]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][1]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][1]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][2]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][2]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][3]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][3]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][4]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][4]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][5]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][5]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][6]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][6]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[1][7]->GetColor() == Piece::BLACK);
-    	TEST(testBoard.boardArray[1][7]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][0]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][0]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][1]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][1]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][2]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][2]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][3]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][3]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][4]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][4]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][5]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][5]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][6]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][6]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[1][7]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[1][7]->GetType() == Piece::PAWN);
 
-    	TEST(testBoard.boardArray[6][0]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][0]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][1]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][1]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][2]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][2]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][3]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][3]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][4]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][4]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][5]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][5]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][6]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][6]->GetType() == Piece::PAWN);
-    	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
-    	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][0]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][0]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][1]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][1]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][2]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][2]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][3]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][3]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][4]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][4]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][5]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][5]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][6]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][6]->GetType() == Piece::PAWN);
+	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
 
 
-    	return success;
-    }
+	return success;
+}
 #endif

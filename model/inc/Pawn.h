@@ -5,7 +5,11 @@
  *      Author: jnuss
  */
 
+#include <unordered_set>
+
 #include "Piece.h"
+#include "BoardPosition.h"
+#include "Board.h"
 
 #ifndef PAWN_H_
 #define PAWN_H_
@@ -16,6 +20,7 @@ public:
 	Pawn(int, int);
 	~Pawn();
 	bool operator==(const Pawn &) const;
+	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
 };
 
 #endif /* PAWN_H_ */

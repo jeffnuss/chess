@@ -5,10 +5,10 @@
  *      Author: jnuss
  */
 
-#include <vector>
 #include <iostream>
 
 #include "Piece.h"
+#include "BoardPosition.h"
 
 #ifndef BOARD_H_
 #define BOARD_H_
@@ -18,7 +18,11 @@ public:
 	Board();
 	~Board();
 	void Reset();
+	Piece & GetPiece(BoardPosition &) const;
+
+#ifndef NDEBUG
 	static bool Test(std::ostream &);
+#endif
 
 private:
 //	std::vector< std::vector <Piece> > boardArray;
