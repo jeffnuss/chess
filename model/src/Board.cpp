@@ -45,11 +45,9 @@ void Board::Reset()
 
 	for (int i = 0; i < 8; i++)
 	{
-		boardArray[1][i] = new Pawn(Piece::PAWN, Piece::BLACK);
-		boardArray[6][i] = new Pawn(Piece::PAWN, Piece::WHITE);
+		boardArray[1][i] = new Pawn(Piece::BLACK);
+		boardArray[6][i] = new Pawn(Piece::WHITE);
 	}
-
-
 
 }
 
@@ -63,9 +61,14 @@ void Board::SetPiece(const BoardPosition & positionToSet, Piece * pieceToSet)
 	boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = pieceToSet;
 }
 
-void Board::ClearCell(const BoardPosition & pieceToDelete)
+void Board::ClearCell(const BoardPosition & cellToClear)
 {
-	boardArray[pieceToDelete.GetRow()][pieceToDelete.GetCol()] = NULL;
+	boardArray[cellToClear.GetRow()][cellToClear.GetCol()] = NULL;
+}
+
+void Board::DeletePiece(const BoardPosition & pieceToDelete)
+{
+	delete boardArray[pieceToDelete.GetRow()][pieceToDelete.GetCol()];
 }
 
 #ifndef NDEBUG
@@ -123,6 +126,10 @@ bool Board::Test(std::ostream & os)
 	testBoard.SetPiece(BoardPosition(6, 7), temp);
 	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
 	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
+
+	testBoard.DeletePiece(BoardPosition(6, 7));
+	Piece * temp2 = testBoard.GetPiece(BoardPosition(6, 7));
+	TEST(testBoard.GetPiece(BoardPosition(6, 7)) != temp);
 
 	return success;
 }

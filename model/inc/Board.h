@@ -21,6 +21,7 @@ public:
 	Piece * GetPiece(const BoardPosition &) const;
 	void ClearCell(const BoardPosition &);
 	void SetPiece(const BoardPosition &, Piece *);
+	void DeletePiece(const BoardPosition &);
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);

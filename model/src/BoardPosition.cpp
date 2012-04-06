@@ -63,9 +63,62 @@ bool BoardPosition::MoveDown()
 	return false;
 }
 
+bool BoardPosition::MoveDownLeft()
+{
+	if (row < 7 && col > 0)
+	{
+		row++;
+		col--;
+		return true;
+	}
+
+	return false;
+}
+
+bool BoardPosition::MoveDownRight()
+{
+	if (row < 7 && col < 7)
+	{
+		row++;
+		col++;
+		return true;
+	}
+
+	return false;
+}
+
+bool BoardPosition::MoveUpLeft()
+{
+	if (row > 0 && col > 0)
+	{
+		row--;
+		col--;
+		return true;
+	}
+
+	return false;
+}
+
+bool BoardPosition::MoveUpRight()
+{
+	if (row > 0 && col < 7)
+	{
+		row--;
+		col++;
+		return true;
+	}
+
+	return false;
+}
+
 bool BoardPosition::operator==(const BoardPosition & other) const
 {
 	return (this->col == other.col && this->row == other.row);
+}
+
+bool BoardPosition::operator!=(const BoardPosition & other) const
+{
+	return (this->col != other.col || this->row != other.row);
 }
 
 #ifndef NDEBUG

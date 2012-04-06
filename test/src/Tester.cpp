@@ -8,6 +8,7 @@
 #include "Board.h"
 #include "BoardPosition.h"
 #include "Facade.h"
+#include "Pawn.h"
 
 using namespace std;
 
@@ -18,6 +19,7 @@ int main()
 	if (!Board::Test(cout)) success = false;
 	if (!BoardPosition::Test(cout)) success = false;
 	if (!Facade::Test(cout)) success = false;
+	if (!Pawn::Test(cout)) success = false;
 
 	if (success) {
 		cout << "Tests Succeeded!" << endl;

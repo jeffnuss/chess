@@ -19,6 +19,7 @@ public:
 	int GetRow() const;
 	int GetCol() const;
 	bool operator==(const BoardPosition &) const;
+	bool operator!=(const BoardPosition &) const;
 	bool MoveUp();
 	bool MoveDown();
 	bool MoveUpLeft();
