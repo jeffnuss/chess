@@ -5,10 +5,12 @@
  *      Author: jnuss
  */
 
-#include <set>
+#include <unordered_set>
+#include <iostream>
 
 #include "Board.h"
 #include "BoardPosition.h"
+#include "UnitTest.h"
 
 #ifndef FACADE_H_
 #define FACADE_H_
@@ -18,7 +20,14 @@ public:
 	Facade();
 	~Facade();
 	void NewGame();
-	std::set<BoardPosition> GetValidMoves(const BoardPosition &) const;
+	std::unordered_set<BoardPosition> GetValidMoves(const BoardPosition &) const;
+	bool CheckForCheck(const std::unordered_set<BoardPosition> &) const;
+	bool CheckForCheckMate(const std::unordered_set<BoardPosition> &) const;
+	Piece * MovePiece(const BoardPosition &, const BoardPosition &);
+
+#ifndef NDEBUG
+	static bool Test(std::ostream &);
+#endif
 
 private:
 	Board * boardPtr;

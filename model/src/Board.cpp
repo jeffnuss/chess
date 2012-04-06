@@ -38,7 +38,7 @@ void Board::Reset()
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			delete boardArray[i][j];
+			//delete boardArray[i][j];
 			boardArray[i][j] = NULL;
 		}
 	}
@@ -53,9 +53,19 @@ void Board::Reset()
 
 }
 
-Piece & Board::GetPiece(BoardPosition & positionToCheck) const
+Piece * Board::GetPiece(const BoardPosition & positionToCheck) const
 {
-	return *boardArray[positionToCheck.GetRow()][positionToCheck.GetCol()];
+	return boardArray[positionToCheck.GetRow()][positionToCheck.GetCol()];
+}
+
+void Board::SetPiece(const BoardPosition & positionToSet, Piece * pieceToSet)
+{
+	boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = pieceToSet;
+}
+
+void Board::ClearCell(const BoardPosition & pieceToDelete)
+{
+	boardArray[pieceToDelete.GetRow()][pieceToDelete.GetCol()] = NULL;
 }
 
 #ifndef NDEBUG
@@ -101,6 +111,18 @@ bool Board::Test(std::ostream & os)
 	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
 	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
 
+	TEST(testBoard.GetPiece(BoardPosition(6, 2))->GetColor() == Piece::WHITE);
+	TEST(testBoard.GetPiece(BoardPosition(6, 2))->GetType() == Piece::PAWN);
+	TEST(testBoard.GetPiece(BoardPosition(1, 6))->GetColor() == Piece::BLACK);
+	TEST(testBoard.GetPiece(BoardPosition(1, 6))->GetType() == Piece::PAWN);
+
+	Piece * temp = testBoard.boardArray[6][7];
+	testBoard.ClearCell(BoardPosition(6, 7));
+	TEST(testBoard.boardArray[6][7] == NULL);
+
+	testBoard.SetPiece(BoardPosition(6, 7), temp);
+	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
 
 	return success;
 }

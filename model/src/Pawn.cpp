@@ -23,22 +23,46 @@ unordered_set<BoardPosition> Pawn::GetLegalMoves(const BoardPosition & currentPi
 	const Board * currentBoardPtr) const
 {
 	unordered_set<BoardPosition> legalMoves;
-	if (currentPiecePosition.GetRow() == 1 && this->pieceColor == Piece::BLACK)
+	BoardPosition tempPos = currentPiecePosition;
+	if (this->pieceColor == Piece::BLACK)
 	{
-		 BoardPosition tempPos = currentPiecePosition;
-		 tempPos.MoveDown();
-		 legalMoves.insert(tempPos);
-		 tempPos.MoveDown();
-		 legalMoves.insert(tempPos);
+		// Make sure to see if you can move up first or else tempPos won't get incremented
+		// and ThereIsAPieceInMyWay will return false
+		if (!tempPos.MoveDown() || ThereIsAPieceInMyWay(tempPos, currentBoardPtr))
+		{
+			return legalMoves;
+		}
+		legalMoves.insert(tempPos);
+		if (currentPiecePosition.GetRow() == 1)
+		{
+			if (!tempPos.MoveDown() || ThereIsAPieceInMyWay(tempPos, currentBoardPtr))
+			{
+				return legalMoves;
+			}
+		 	legalMoves.insert(tempPos);
+		 }
 	}
-	else if (currentPiecePosition.GetRow() == 6 && this->pieceColor == Piece::WHITE)
+	else if (this->pieceColor == Piece::WHITE)
 	{
-		 BoardPosition tempPos = currentPiecePosition;
-		 tempPos.MoveUp();
-		 legalMoves.insert(tempPos);
-		 tempPos.MoveUp();
-		 legalMoves.insert(tempPos);
+		if (!tempPos.MoveUp() || ThereIsAPieceInMyWay(tempPos, currentBoardPtr))
+		{
+			return legalMoves;
+		}
+		legalMoves.insert(tempPos);
+		if (currentPiecePosition.GetRow() == 6)
+		{
+			if (!tempPos.MoveUp() || ThereIsAPieceInMyWay(tempPos, currentBoardPtr))
+			{
+				return legalMoves;
+			}
+			legalMoves.insert(tempPos);
+		}
 	}
 
 	return legalMoves;
+}
+
+bool Pawn::ThereIsAPieceInMyWay(const BoardPosition & positionToCheck, const Board * boardPtr) const
+{
+	return (boardPtr->GetPiece(positionToCheck) != NULL);
 }

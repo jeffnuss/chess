@@ -5,9 +5,12 @@
  *      Author: jnuss
  */
 
+#include <unordered_set>
+
 #include "IChessController.h"
 #include "../../view/inc/IChessView.h"
 #include "../../model/inc/Facade.h"
+#include "../../model/inc/BoardPosition.h"
 
 #ifndef CHESSCONTROLLER_H_
 #define CHESSCONTROLLER_H_
@@ -28,11 +31,16 @@ public:
 	void on_UndoMove();
 	void on_QuitGame();
 	void on_TimerEvent();
-	void SetView(IChessView* view);
+	void SetView(IChessView * view);
+	void HighlightMoves(const BoardPosition &);
+	void ClearCurrentHighlights(std::unordered_set<BoardPosition> &);
+	void MovePiece(const BoardPosition &, const BoardPosition, const Piece *);
 
 private:
 	IChessView * viewPtr;
 	Facade * facadePtr;
+	std::unordered_set<BoardPosition> currentHighlightedCells;
+	BoardPosition currentSelectedCell;
 
 };
 

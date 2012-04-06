@@ -5,6 +5,8 @@
  *      Author: jnuss
  */
 
+#include <cassert>
+
 #include "../inc/Facade.h"
 
 using namespace std;
@@ -24,13 +26,13 @@ void Facade::NewGame()
 	boardPtr->Reset();
 }
 
-set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck) const
+unordered_set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck) const
 {
-	Piece pieceToCheck = boardPtr->GetPiece(positionToCheck);
-	unordered_set possibleMoves;
+	Piece * pieceToCheck = boardPtr->GetPiece(positionToCheck);
+	unordered_set<BoardPosition> possibleMoves;
 	if (pieceToCheck != NULL)
 	{
-		possibleMoves = pieceToCheck.GetLegalMoves();
+		possibleMoves = pieceToCheck->GetLegalMoves(positionToCheck, boardPtr);
 		CheckForCheck(possibleMoves);
 		CheckForCheckMate(possibleMoves);
 	}
@@ -38,12 +40,45 @@ set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck) 
 	return possibleMoves;
 }
 
-void CheckForCheck(BoardPosition & positionToCheck) const
+bool Facade::CheckForCheck(const std::unordered_set<BoardPosition> & possibleMoves) const
 {
 	
 }
 
-void CheckForCheckMate(BBoardPosition & positionToCheck) const
+bool Facade::CheckForCheckMate(const std::unordered_set<BoardPosition> & possibleMoves) const
 {
 
 }
+
+Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & moveTo)
+{
+	assert (!(moveFrom == moveTo));
+
+	Piece * temp = boardPtr->GetPiece(moveFrom);
+	if (boardPtr->GetPiece(moveTo) != NULL)
+	{
+
+	}
+
+	else
+	{
+		boardPtr->ClearCell(moveFrom);
+		boardPtr->SetPiece(moveTo, temp);
+	}
+
+	return temp;
+}
+
+#ifndef NDEBUG
+bool Facade::Test(ostream & os)
+{
+	bool success = true;
+
+	Facade testFacade;
+
+	TEST(testFacade.MovePiece(BoardPosition(1,0), BoardPosition(2,0)) == testFacade.boardPtr->GetPiece(BoardPosition(2,0)));
+	Piece * test = testFacade.boardPtr->GetPiece(BoardPosition(2,0));
+
+	return success;
+}
+#endif

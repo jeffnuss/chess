@@ -18,7 +18,9 @@ public:
 	Board();
 	~Board();
 	void Reset();
-	Piece & GetPiece(BoardPosition &) const;
+	Piece * GetPiece(const BoardPosition &) const;
+	void ClearCell(const BoardPosition &);
+	void SetPiece(const BoardPosition &, Piece *);
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);

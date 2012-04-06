@@ -25,15 +25,15 @@ public:
 
 	enum PieceColor
 	{
-		WHITE, BLACK
+		BLACK, WHITE
 	};
 
 	Piece();
 	Piece(int, int);
 	virtual ~Piece();
-	virtual int GetType();
-	virtual int GetColor();
-	virtual std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const = 0;
+	virtual int GetType() const;
+	virtual int GetColor() const;
+	virtual std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
 	bool operator==(const Piece &) const;
 	Piece & operator=(const Piece &);	
 

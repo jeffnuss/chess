@@ -21,8 +21,7 @@ public:
 	~Pawn();
 	bool operator==(const Pawn &) const;
 	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
-	void CheckForCheck(Board *);
-	void CheckForCheckMate(Board *);
+	bool ThereIsAPieceInMyWay(const BoardPosition &, const Board *) const;
 };
 
 #endif /* PAWN_H_ */

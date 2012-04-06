@@ -105,6 +105,7 @@ LIB_OBJS = $(VIEW_OBJ)ChessView.o \
 # Pseudo-targets
 
 run: $(EXE) 
+	ulimit -c unlimited
 	$(EXE)
 
 test: $(TEST)
