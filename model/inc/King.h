@@ -9,11 +9,13 @@
 #define KING_H_
 
 #include "Piece.h"
+#include "Board.h"
 
 class King :public Piece
 {
 public:
 	King(const int);
+	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
 };
 
 #endif /* KING_H_ */
