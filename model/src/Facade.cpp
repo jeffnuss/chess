@@ -69,7 +69,6 @@ bool Facade::CheckForCheck() const
 
 bool Facade::CheckStraight(BoardPosition & currentKingPos) const
 {
-	bool inCheck = false;
 	BoardPosition tempPos = currentKingPos;
 
 	while (tempPos.MoveUp() && boardPtr->GetPiece(tempPos) == NULL);
@@ -119,7 +118,6 @@ bool Facade::CheckForStraightAttack(const Piece * tempPiece) const
 
 bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 {
-	bool inCheck = false;
 	BoardPosition tempPos = currentKingPos;
 
 	while (tempPos.MoveUpRight() && boardPtr->GetPiece(tempPos) == NULL);
@@ -155,48 +153,23 @@ bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 
 	// Add special check for pawn attacks
 	tempPos = currentKingPos;
-	if (whoseTurnIsIt != Piece::BLACK)
+	tempPos.MoveUpRight();
+	Piece * tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != whoseTurnIsIt
+			&& tempPiece->GetType() == Piece::PAWN)
 	{
-		tempPos.MoveUpRight();
-		Piece * tempPiece = boardPtr->GetPiece(tempPos);
-		if (tempPiece != NULL
-				&& tempPiece->GetColor() == Piece::BLACK
-				&& tempPiece->GetType() == Piece::PAWN)
-		{
-			return true;
-		}
-
-		tempPos = currentKingPos;
-		tempPos.MoveUpLeft();
-		tempPiece = boardPtr->GetPiece(tempPos);
-		if (tempPiece != NULL
-				&& tempPiece->GetColor() == Piece::BLACK
-				&& tempPiece->GetType() == Piece::PAWN)
-		{
-			return true;
-		}
+		return true;
 	}
 
-	else
+	tempPos = currentKingPos;
+	tempPos.MoveUpLeft();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != whoseTurnIsIt
+			&& tempPiece->GetType() == Piece::PAWN)
 	{
-		tempPos.MoveDownRight();
-		Piece * tempPiece = boardPtr->GetPiece(tempPos);
-		if (tempPiece != NULL
-				&& tempPiece->GetColor() == Piece::WHITE
-				&& tempPiece->GetType() == Piece::PAWN)
-		{
-			return true;
-		}
-
-		tempPos = currentKingPos;
-		tempPos.MoveDownLeft();
-		tempPiece = boardPtr->GetPiece(tempPos);
-		if (tempPiece != NULL
-				&& tempPiece->GetColor() == Piece::WHITE
-				&& tempPiece->GetType() == Piece::PAWN)
-		{
-			return true;
-		}
+		return true;
 	}
 
 	return false;
@@ -213,8 +186,114 @@ bool Facade::CheckForDiagonalAttack(const Piece * tempPiece) const
 	return false;
 }
 
-bool Facade::CheckKnightPositions(BoardPosition & tempPos) const
+bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 {
+	BoardPosition tempPos = currentKingPos;
+	Piece * tempPiece;
+
+	if (tempPos.MoveUpRight()
+			&& tempPos.MoveUp())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveUpRight()
+			&& tempPos.MoveRight())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveDownRight()
+			&& tempPos.MoveDown())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveDownRight()
+			&& tempPos.MoveRight())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveUpLeft()
+			&& tempPos.MoveUp())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveUpLeft()
+			&& tempPos.MoveLeft())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveDownLeft()
+			&& tempPos.MoveDown())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
+	tempPos = currentKingPos;
+	if (tempPos.MoveDownLeft()
+			&& tempPos.MoveLeft())
+	{
+		tempPiece = boardPtr->GetPiece(tempPos);
+		if (tempPiece != NULL
+				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetType() == Piece::KNIGHT)
+		{
+			return true;
+		}
+	}
+
 	return false;
 }
 

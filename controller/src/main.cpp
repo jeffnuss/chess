@@ -27,7 +27,7 @@ using namespace std;
 void connectController(ChessView& view, IChessController ** cont, int argc, char ** argv)
 {
 	// 1. Process command-line args
-	
+	// TODO: Process command-line args
 	// 2. Initialize controller. This is tricky because it's a double pointer.
 	// Example:
 	//		(*cont) = new MyController(parameters);
