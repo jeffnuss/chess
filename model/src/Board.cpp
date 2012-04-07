@@ -31,8 +31,6 @@ Board::Board()
 		  boardArray[i][j] = NULL;
 	  }
 	}
-
-	this->Reset();
 }
 
 Board::~Board() 
@@ -87,6 +85,10 @@ void Board::Reset()
 	boardArray[7][5] = new Bishop(Piece::WHITE);
 	boardArray[7][6] = new Knight(Piece::WHITE);
 	boardArray[7][7] = new Rook(Piece::WHITE);
+
+	blackKingPosition = BoardPosition(0, 4);
+	whiteKingPosition = BoardPosition(7, 4);
+
 }
 
 Piece * Board::GetPiece(const BoardPosition & positionToCheck) const
@@ -97,6 +99,17 @@ Piece * Board::GetPiece(const BoardPosition & positionToCheck) const
 void Board::SetPiece(const BoardPosition & positionToSet, Piece * pieceToSet)
 {
 	boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = pieceToSet;
+	if (pieceToSet->GetType() == Piece::KING)
+	{
+		if (pieceToSet->GetColor() == Piece::BLACK)
+		{
+			blackKingPosition = positionToSet;
+		}
+		else
+		{
+			whiteKingPosition = positionToSet;
+		}
+	}
 }
 
 Piece * Board::SetPiece(const BoardPosition & positionToSet, const int pieceType, const int pieceColor)
@@ -134,6 +147,16 @@ void Board::DeletePiece(const BoardPosition & pieceToDelete)
 {
 	delete boardArray[pieceToDelete.GetRow()][pieceToDelete.GetCol()];
 	ClearCell(pieceToDelete);
+}
+
+BoardPosition Board::GetBlackKingPostion() const
+{
+	return blackKingPosition;
+}
+
+BoardPosition Board::GetWhiteKingPostion() const
+{
+	return whiteKingPosition;
 }
 
 #ifndef NDEBUG
@@ -229,6 +252,21 @@ bool Board::Test(std::ostream & os)
 	testBoard.DeletePiece(BoardPosition(6, 7));
 	Piece * temp2 = testBoard.GetPiece(BoardPosition(6, 7));
 	TEST(testBoard.GetPiece(BoardPosition(6, 7)) != temp);
+
+	TEST(testBoard.GetBlackKingPostion() == testBoard.blackKingPosition);
+	TEST(testBoard.GetWhiteKingPostion() == testBoard.whiteKingPosition);
+
+	testBoard.SetPiece(BoardPosition(3, 4), testBoard.GetPiece(BoardPosition(7, 4)));
+	testBoard.ClearCell(BoardPosition(7, 4));
+	TEST(testBoard.GetWhiteKingPostion() == BoardPosition(3, 4));
+
+	testBoard.SetPiece(BoardPosition(3, 6), testBoard.GetPiece(BoardPosition(0, 4)));
+	testBoard.ClearCell(BoardPosition(0, 4));
+	TEST(testBoard.GetBlackKingPostion() == BoardPosition(3, 6));
+
+	testBoard.SetPiece(BoardPosition(3, 4), testBoard.GetPiece(BoardPosition(3, 6)));
+	testBoard.ClearCell(BoardPosition(3, 6));
+	TEST(testBoard.GetBlackKingPostion() == BoardPosition(3, 4));
 
 	return success;
 }

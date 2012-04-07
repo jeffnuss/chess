@@ -21,7 +21,8 @@ public:
 	~Facade();
 	void NewGame();
 	std::unordered_set<BoardPosition> GetValidMoves(const BoardPosition &) const;
-	bool CheckForCheck(const std::unordered_set<BoardPosition> &) const;
+	bool CheckForCheck() const;
+	bool WillKingBeInCheck(const std::unordered_set<BoardPosition> &) const;
 	bool CheckForCheckMate(const std::unordered_set<BoardPosition> &) const;
 	Piece * MovePiece(const BoardPosition &, const BoardPosition &);
 
@@ -31,6 +32,13 @@ public:
 
 private:
 	Board * boardPtr;
+	int whoseTurnIsIt;
+
+	bool CheckStraight(BoardPosition &) const;
+	bool CheckForStraightAttack(const Piece *) const;
+	bool CheckDiagonal(BoardPosition &) const;
+	bool CheckForDiagonalAttack(const Piece *) const;
+	bool CheckKnightPositions(BoardPosition &) const;
 };
 
 #endif /* FACADE_H_ */

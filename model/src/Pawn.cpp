@@ -107,6 +107,7 @@ bool Pawn::Test(ostream & os)
 	bool success = true;
 
 	Board * testBoard = new Board();
+	testBoard->Reset();
 	Pawn testPawn(Piece::WHITE);
 	
 	TEST(testPawn.pieceColor == testPawn.GetColor());

@@ -16,7 +16,6 @@ Piece::Piece(const int pieceType, const int pieceColor) : pieceType(pieceType), 
 
 Piece::~Piece()
 {
-	// TODO Auto-generated destructor stub
 }
 
 int Piece::GetType() const

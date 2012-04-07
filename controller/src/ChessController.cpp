@@ -32,6 +32,14 @@ void ChessController::on_CellSelected(int row, int col, int button)
 		MovePiece(currentSelectedCell, newSelectedCell, pieceToMove);
 		ClearCurrentHighlights(currentHighlightedCells);
 		currentHighlightedCells.clear();
+		if (facadePtr->CheckForCheck())
+		{
+			viewPtr->SetStatusBar("Check");
+		}
+		else
+		{
+			viewPtr->SetStatusBar("");
+		}
 	}
 
 	else

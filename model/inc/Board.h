@@ -23,14 +23,16 @@ public:
 	Piece * SetPiece(const BoardPosition &, const int, const int);
 	void SetPiece(const BoardPosition &, Piece *);
 	void DeletePiece(const BoardPosition &);
+	BoardPosition GetBlackKingPostion() const;
+	BoardPosition GetWhiteKingPostion() const;
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);
 #endif
 
 private:
-//	std::vector< std::vector <Piece> > boardArray;
-//	Piece * (* boardArray)[8];
+	BoardPosition blackKingPosition;
+	BoardPosition whiteKingPosition;
 	Piece *** boardArray;
 };
 
