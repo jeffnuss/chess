@@ -5,6 +5,9 @@
  *      Author: jnuss
  */
 
+#ifndef PAWN_H_
+#define PAWN_H_
+
 #include <unordered_set>
 #include <iostream>
 
@@ -12,14 +15,10 @@
 #include "BoardPosition.h"
 #include "Board.h"
 
-#ifndef PAWN_H_
-#define PAWN_H_
-
 class Pawn : public Piece
 {
 public:
-	Pawn(int);
-	~Pawn();
+	Pawn(const int);
 	bool operator==(const Pawn &) const;
 	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
 	bool ThereIsAPieceInMyWay(const BoardPosition &, const Board *) const;

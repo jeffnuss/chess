@@ -7,12 +7,6 @@
 
 #include "../inc/Knight.h"
 
-Knight::Knight() {
-	// TODO Auto-generated constructor stub
-
+Knight::Knight(const int color) : Piece(Piece::KNIGHT, color)
+{
 }
-
-Knight::~Knight() {
-	// TODO Auto-generated destructor stub
-}
-

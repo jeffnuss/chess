@@ -7,12 +7,7 @@
 
 #include "../inc/King.h"
 
-King::King() {
-	// TODO Auto-generated constructor stub
-
-}
-
-King::~King() {
-	// TODO Auto-generated destructor stub
+King::King(const int color) : Piece(Piece::KING, color)
+{
 }
 

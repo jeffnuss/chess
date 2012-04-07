@@ -8,10 +8,12 @@
 #ifndef KING_H_
 #define KING_H_
 
-class King {
+#include "Piece.h"
+
+class King :public Piece
+{
 public:
-	King();
-	~King();
+	King(const int);
 };
 
 #endif /* KING_H_ */

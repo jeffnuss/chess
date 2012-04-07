@@ -28,8 +28,7 @@ public:
 		BLACK, WHITE
 	};
 
-	Piece();
-	Piece(int, int);
+	Piece(const int, const int);
 	virtual ~Piece();
 	virtual int GetType() const;
 	virtual int GetColor() const;

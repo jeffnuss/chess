@@ -7,12 +7,7 @@
 
 #include "../inc/Bishop.h"
 
-Bishop::Bishop() {
-	// TODO Auto-generated constructor stub
-
-}
-
-Bishop::~Bishop() {
-	// TODO Auto-generated destructor stub
+Bishop::Bishop(const int color) : Piece(Piece::BISHOP, color)
+{
 }
 

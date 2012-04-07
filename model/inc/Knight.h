@@ -8,10 +8,12 @@
 #ifndef KNIGHT_H_
 #define KNIGHT_H_
 
-class Knight {
+#include "Piece.h"
+
+class Knight : public Piece
+{
 public:
-	Knight();
-	~Knight();
+	Knight(const int);
 };
 
 #endif /* KNIGHT_H_ */

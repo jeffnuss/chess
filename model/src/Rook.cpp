@@ -7,12 +7,7 @@
 
 #include "../inc/Rook.h"
 
-Rook::Rook() {
-	// TODO Auto-generated constructor stub
-
-}
-
-Rook::~Rook() {
-	// TODO Auto-generated destructor stub
+Rook::Rook(const int color) : Piece(Piece::ROOK, color)
+{
 }
 

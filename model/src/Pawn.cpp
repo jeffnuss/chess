@@ -6,19 +6,13 @@
  */
 
 #include "../inc/Pawn.h"
-#include "UnitTest.h"
+#include "../../test/inc/UnitTest.h"
 
 using namespace std;
 
-Pawn::Pawn(int color) : Piece(Piece::PAWN, color)
+Pawn::Pawn(const int color) : Piece(Piece::PAWN, color)
 {
 }
-
-Pawn::~Pawn()
-{
-	// TODO Auto-generated destructor stub
-}
-
    
 unordered_set<BoardPosition> Pawn::GetLegalMoves(const BoardPosition & currentPiecePosition,
 	const Board * currentBoardPtr) const
@@ -120,14 +114,12 @@ bool Pawn::Test(ostream & os)
 	TEST(testPawn.ThereIsAPieceInMyWay(BoardPosition(5, 3), testBoard) == false);
 	TEST(testPawn.ThereIsAPieceInMyWay(BoardPosition(6, 3), testBoard) == true);
 	
-	Pawn * testPiece1 = new Pawn(Piece::BLACK);
-	testBoard->SetPiece(BoardPosition(5,3), testPiece1);
+	testBoard->SetPiece(BoardPosition(5, 3), Piece::PAWN, Piece::BLACK);
 	unordered_set<BoardPosition> testMoves1 = testPawn.GetLegalMoves(BoardPosition(6, 4), testBoard);
 	unordered_set<BoardPosition> testMoves2 = {BoardPosition(5, 3), BoardPosition(5, 4), BoardPosition(4, 4)};
 	TEST(testMoves1 == testMoves2);
 
 	delete testBoard;
-	delete testPiece1;
 	return success;
 }
 #endif

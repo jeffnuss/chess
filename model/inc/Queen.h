@@ -8,10 +8,12 @@
 #ifndef QUEEN_H_
 #define QUEEN_H_
 
-class Queen {
+#include "Piece.h"
+
+class Queen : public Piece
+{
 public:
-	Queen();
-	~Queen();
+	Queen(const int);
 };
 
 #endif /* QUEEN_H_ */

@@ -8,37 +8,60 @@
 #include "../inc/Board.h"
 #include "../../test/inc/UnitTest.h"
 #include "Pawn.h"
+#include "Knight.h"
+#include "Bishop.h"
+#include "Rook.h"
+#include "Queen.h"
+#include "King.h"
 
 using namespace std;
 
 Board::Board() 
 {
 //	boardArray(8, vector<Piece>(8, 0));
-	boardArray = new Piece * [8][8];
+//	boardArray = new Piece * [8][8];
+	boardArray = new Piece**[8];
+	for (int i = 0; i < 8; ++i)
+	{
+		boardArray[i] = new Piece *[8];
+	}
+
+	for (int i = 0; i < 8; ++i)
+	{
+	  for (int j = 0; j < 8; ++j)
+	  {
+		  boardArray[i][j] = NULL;
+	  }
+	}
+
 	this->Reset();
 }
 
 Board::~Board() 
 {
-//	for (int i = 0; i < 7; i++)
-//	{
-//		for (int j = 0; j < 7; j++)
-//		{
-//			delete boardArray[i][j];
-//		}
-//	}
-//	delete[] boardArray;
-}
-
-void Board::Reset()
-{
-//	boardArray.clear();
-
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
 		{
-			//delete boardArray[i][j];
+			delete boardArray[i][j];
+		}
+	}
+
+	for (int i = 0; i < 8; i++)
+	{
+		delete[] boardArray[i];
+	}
+
+	delete[] boardArray;
+}
+
+void Board::Reset()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			delete boardArray[i][j];
 			boardArray[i][j] = NULL;
 		}
 	}
@@ -56,9 +79,31 @@ Piece * Board::GetPiece(const BoardPosition & positionToCheck) const
 	return boardArray[positionToCheck.GetRow()][positionToCheck.GetCol()];
 }
 
-void Board::SetPiece(const BoardPosition & positionToSet, Piece * pieceToSet)
+Piece * Board::SetPiece(const BoardPosition & positionToSet, const int pieceType, const int pieceColor)
 {
-	boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = pieceToSet;
+	switch (pieceType)
+	{
+	case Piece::PAWN:
+		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new Pawn(pieceColor);
+		break;
+	case Piece::KNIGHT:
+		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new Knight(pieceColor);
+		break;
+	case Piece::BISHOP:
+		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new Bishop(pieceColor);
+		break;
+	case Piece::ROOK:
+		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new Rook(pieceColor);
+		break;
+	case Piece::QUEEN:
+		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new Queen(pieceColor);
+		break;
+	case Piece::KING:
+		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new King(pieceColor);
+		break;
+	}
+
+	return boardArray[positionToSet.GetRow()][positionToSet.GetCol()];
 }
 
 void Board::ClearCell(const BoardPosition & cellToClear)
@@ -69,6 +114,7 @@ void Board::ClearCell(const BoardPosition & cellToClear)
 void Board::DeletePiece(const BoardPosition & pieceToDelete)
 {
 	delete boardArray[pieceToDelete.GetRow()][pieceToDelete.GetCol()];
+	ClearCell(pieceToDelete);
 }
 
 #ifndef NDEBUG
@@ -123,7 +169,7 @@ bool Board::Test(std::ostream & os)
 	testBoard.ClearCell(BoardPosition(6, 7));
 	TEST(testBoard.boardArray[6][7] == NULL);
 
-	testBoard.SetPiece(BoardPosition(6, 7), temp);
+	testBoard.SetPiece(BoardPosition(6, 7), temp->GetType(), temp->GetColor());
 	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
 	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
 

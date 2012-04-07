@@ -63,7 +63,7 @@ Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & 
 	else
 	{
 		boardPtr->ClearCell(moveFrom);
-		boardPtr->SetPiece(moveTo, temp);
+		temp = boardPtr->SetPiece(moveTo, temp->GetType(), temp->GetColor());
 	}
 
 	return temp;

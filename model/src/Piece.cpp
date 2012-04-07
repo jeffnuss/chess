@@ -10,10 +10,8 @@
 
 using namespace std;
 
-Piece::Piece(int pieceType, int pieceColor) : pieceType(pieceType), pieceColor(pieceColor)
+Piece::Piece(const int pieceType, const int pieceColor) : pieceType(pieceType), pieceColor(pieceColor)
 {
-	// TODO Auto-generated constructor stub
-
 }
 
 Piece::~Piece()

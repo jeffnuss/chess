@@ -5,13 +5,13 @@
  *      Author: jnuss
  */
 
+#ifndef BOARD_H_
+#define BOARD_H_
+
 #include <iostream>
 
 #include "Piece.h"
 #include "BoardPosition.h"
-
-#ifndef BOARD_H_
-#define BOARD_H_
 
 class Board {
 public:
@@ -20,7 +20,7 @@ public:
 	void Reset();
 	Piece * GetPiece(const BoardPosition &) const;
 	void ClearCell(const BoardPosition &);
-	void SetPiece(const BoardPosition &, Piece *);
+	Piece * SetPiece(const BoardPosition &, const int, const int);
 	void DeletePiece(const BoardPosition &);
 
 #ifndef NDEBUG
@@ -29,7 +29,8 @@ public:
 
 private:
 //	std::vector< std::vector <Piece> > boardArray;
-	Piece * (* boardArray)[8];
+//	Piece * (* boardArray)[8];
+	Piece *** boardArray;
 };
 
 #endif /* BOARD_H_ */

@@ -10,7 +10,7 @@
 
 #include "Board.h"
 #include "BoardPosition.h"
-#include "UnitTest.h"
+#include "../../test/inc/UnitTest.h"
 
 #ifndef FACADE_H_
 #define FACADE_H_

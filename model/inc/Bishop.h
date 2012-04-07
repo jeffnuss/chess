@@ -8,10 +8,12 @@
 #ifndef BISHOP_H_
 #define BISHOP_H_
 
-class Bishop {
+#include "Piece.h"
+
+class Bishop : public Piece
+{
 public:
-	Bishop();
-	~Bishop();
+	Bishop(const int);
 };
 
 #endif /* BISHOP_H_ */

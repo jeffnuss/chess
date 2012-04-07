@@ -85,6 +85,11 @@ MY_OBJS =  $(CONT_OBJ)ChessController.o \
 	$(MODEL_OBJ)Board.o \
 	$(MODEL_OBJ)Piece.o \
 	$(MODEL_OBJ)Pawn.o \
+	$(MODEL_OBJ)Knight.o \
+	$(MODEL_OBJ)Bishop.o \
+	$(MODEL_OBJ)Rook.o \
+	$(MODEL_OBJ)Queen.o \
+	$(MODEL_OBJ)King.o \
 	$(MODEL_OBJ)BoardPosition.o
 
 TEST_O = $(TEST_OBJ)Tester.o
@@ -186,9 +191,9 @@ $(MEMMAIN_O): $(CONT_SRC)main.cpp $(VIEW_INC)ChessGuiImages.h $(VIEW_INC)ChessVi
 
 depend: depend.mk
 	@-rm depend.mk
-	@for f in $(MODEL_SOURCES) ; do g++ -MM -MT $(MODEL_OBJ)$$f.o -I $(MODEL_INC) $(MODEL_SRC)$$f.cpp >> depend.mk; done
-	@for f in $(DATA_SOURCES) ; do g++ -MM -MT $(DATA_OBJ)$$f.o -I $(DATA_INC) $(DATA_SRC)$$f.cpp >> depend.mk; done
-	@g++ -MM -MT $(CONT_OBJ)ChessController.o -I $(CONT_INC) $(CONT_SRC)ChessController.cpp >> depend.mk
+	@for f in $(MODEL_SOURCES) ; do g++ -MM -MT $(MODEL_OBJ)$$f.o -I $(MODEL_INC) $(AWESOMENESS_FLAG) $(MODEL_SRC)$$f.cpp >> depend.mk; done
+	@for f in $(DATA_SOURCES) ; do g++ -MM -MT $(DATA_OBJ)$$f.o -I $(DATA_INC) $(AWESOMENESS_FLAG) $(DATA_SRC)$$f.cpp >> depend.mk; done
+	@g++ -MM -MT $(CONT_OBJ)ChessController.o -I $(CONT_INC) $(AWESOMENESS_FLAG) $(CONT_SRC)ChessController.cpp >> depend.mk
 
 $(TEST_OBJ)Tester.o: $(TEST_SRC)Tester.cpp $(LIB)
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(TEST_O) -c $(LOG_FLAG) $(TEST_SRC)Tester.cpp

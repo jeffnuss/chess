@@ -8,10 +8,12 @@
 #ifndef ROOK_H_
 #define ROOK_H_
 
-class Rook {
+#include "Piece.h"
+
+class Rook : public Piece
+{
 public:
-	Rook();
-	~Rook();
+	Rook(const int);
 };
 
 #endif /* ROOK_H_ */

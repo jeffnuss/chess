@@ -7,12 +7,7 @@
 
 #include "../inc/Queen.h"
 
-Queen::Queen() {
-	// TODO Auto-generated constructor stub
-
-}
-
-Queen::~Queen() {
-	// TODO Auto-generated destructor stub
+Queen::Queen(const int color) : Piece(Piece::QUEEN, color)
+{
 }
 
