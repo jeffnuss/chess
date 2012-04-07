@@ -21,6 +21,7 @@ public:
 	Piece * GetPiece(const BoardPosition &) const;
 	void ClearCell(const BoardPosition &);
 	Piece * SetPiece(const BoardPosition &, const int, const int);
+	void SetPiece(const BoardPosition &, Piece *);
 	void DeletePiece(const BoardPosition &);
 
 #ifndef NDEBUG

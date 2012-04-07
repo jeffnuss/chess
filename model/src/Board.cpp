@@ -18,8 +18,6 @@ using namespace std;
 
 Board::Board() 
 {
-//	boardArray(8, vector<Piece>(8, 0));
-//	boardArray = new Piece * [8][8];
 	boardArray = new Piece**[8];
 	for (int i = 0; i < 8; ++i)
 	{
@@ -72,11 +70,33 @@ void Board::Reset()
 		boardArray[6][i] = new Pawn(Piece::WHITE);
 	}
 
+	boardArray[0][0] = new Rook(Piece::BLACK);
+	boardArray[0][1] = new Knight(Piece::BLACK);
+	boardArray[0][2] = new Bishop(Piece::BLACK);
+	boardArray[0][3] = new Queen(Piece::BLACK);
+	boardArray[0][4] = new King(Piece::BLACK);
+	boardArray[0][5] = new Bishop(Piece::BLACK);
+	boardArray[0][6] = new Knight(Piece::BLACK);
+	boardArray[0][7] = new Rook(Piece::BLACK);
+
+	boardArray[7][0] = new Rook(Piece::WHITE);
+	boardArray[7][1] = new Knight(Piece::WHITE);
+	boardArray[7][2] = new Bishop(Piece::WHITE);
+	boardArray[7][3] = new Queen(Piece::WHITE);
+	boardArray[7][4] = new King(Piece::WHITE);
+	boardArray[7][5] = new Bishop(Piece::WHITE);
+	boardArray[7][6] = new Knight(Piece::WHITE);
+	boardArray[7][7] = new Rook(Piece::WHITE);
 }
 
 Piece * Board::GetPiece(const BoardPosition & positionToCheck) const
 {
 	return boardArray[positionToCheck.GetRow()][positionToCheck.GetCol()];
+}
+
+void Board::SetPiece(const BoardPosition & positionToSet, Piece * pieceToSet)
+{
+	boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = pieceToSet;
 }
 
 Piece * Board::SetPiece(const BoardPosition & positionToSet, const int pieceType, const int pieceColor)
@@ -102,7 +122,6 @@ Piece * Board::SetPiece(const BoardPosition & positionToSet, const int pieceType
 		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new King(pieceColor);
 		break;
 	}
-
 	return boardArray[positionToSet.GetRow()][positionToSet.GetCol()];
 }
 
@@ -143,6 +162,23 @@ bool Board::Test(std::ostream & os)
 	TEST(testBoard.boardArray[1][7]->GetColor() == Piece::BLACK);
 	TEST(testBoard.boardArray[1][7]->GetType() == Piece::PAWN);
 
+	TEST(testBoard.boardArray[0][0]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][0]->GetType() == Piece::ROOK);
+	TEST(testBoard.boardArray[0][1]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][1]->GetType() == Piece::KNIGHT);
+	TEST(testBoard.boardArray[0][2]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][2]->GetType() == Piece::BISHOP);
+	TEST(testBoard.boardArray[0][3]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][3]->GetType() == Piece::QUEEN);
+	TEST(testBoard.boardArray[0][4]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][4]->GetType() == Piece::KING);
+	TEST(testBoard.boardArray[0][5]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][5]->GetType() == Piece::BISHOP);
+	TEST(testBoard.boardArray[0][6]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][6]->GetType() == Piece::KNIGHT);
+	TEST(testBoard.boardArray[0][7]->GetColor() == Piece::BLACK);
+	TEST(testBoard.boardArray[0][7]->GetType() == Piece::ROOK);
+
 	TEST(testBoard.boardArray[6][0]->GetColor() == Piece::WHITE);
 	TEST(testBoard.boardArray[6][0]->GetType() == Piece::PAWN);
 	TEST(testBoard.boardArray[6][1]->GetColor() == Piece::WHITE);
@@ -159,6 +195,23 @@ bool Board::Test(std::ostream & os)
 	TEST(testBoard.boardArray[6][6]->GetType() == Piece::PAWN);
 	TEST(testBoard.boardArray[6][7]->GetColor() == Piece::WHITE);
 	TEST(testBoard.boardArray[6][7]->GetType() == Piece::PAWN);
+
+	TEST(testBoard.boardArray[7][0]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][0]->GetType() == Piece::ROOK);
+	TEST(testBoard.boardArray[7][1]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][1]->GetType() == Piece::KNIGHT);
+	TEST(testBoard.boardArray[7][2]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][2]->GetType() == Piece::BISHOP);
+	TEST(testBoard.boardArray[7][3]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][3]->GetType() == Piece::QUEEN);
+	TEST(testBoard.boardArray[7][4]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][4]->GetType() == Piece::KING);
+	TEST(testBoard.boardArray[7][5]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][5]->GetType() == Piece::BISHOP);
+	TEST(testBoard.boardArray[7][6]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][6]->GetType() == Piece::KNIGHT);
+	TEST(testBoard.boardArray[7][7]->GetColor() == Piece::WHITE);
+	TEST(testBoard.boardArray[7][7]->GetType() == Piece::ROOK);
 
 	TEST(testBoard.GetPiece(BoardPosition(6, 2))->GetColor() == Piece::WHITE);
 	TEST(testBoard.GetPiece(BoardPosition(6, 2))->GetType() == Piece::PAWN);

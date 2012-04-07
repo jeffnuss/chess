@@ -57,14 +57,17 @@ Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & 
 	Piece * temp = boardPtr->GetPiece(moveFrom);
 	if (boardPtr->GetPiece(moveTo) != NULL)
 	{
-
+		boardPtr->ClearCell(moveFrom);
+		boardPtr->DeletePiece(moveTo);
 	}
 
 	else
 	{
+
 		boardPtr->ClearCell(moveFrom);
-		temp = boardPtr->SetPiece(moveTo, temp->GetType(), temp->GetColor());
 	}
+
+	boardPtr->SetPiece(moveTo, temp);
 
 	return temp;
 }
@@ -77,7 +80,6 @@ bool Facade::Test(ostream & os)
 	Facade testFacade;
 
 	TEST(testFacade.MovePiece(BoardPosition(1,0), BoardPosition(2,0)) == testFacade.boardPtr->GetPiece(BoardPosition(2,0)));
-	Piece * test = testFacade.boardPtr->GetPiece(BoardPosition(2,0));
 
 	return success;
 }

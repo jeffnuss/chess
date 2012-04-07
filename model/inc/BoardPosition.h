@@ -22,6 +22,8 @@ public:
 	bool operator!=(const BoardPosition &) const;
 	bool MoveUp();
 	bool MoveDown();
+	bool MoveLeft();
+	bool MoveRight();
 	bool MoveUpLeft();
 	bool MoveUpRight();
 	bool MoveDownLeft();

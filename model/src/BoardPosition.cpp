@@ -63,6 +63,28 @@ bool BoardPosition::MoveDown()
 	return false;
 }
 
+bool BoardPosition::MoveRight()
+{
+	if (col < 7)
+	{
+		col++;
+		return true;
+	}
+
+	return false;
+}
+
+bool BoardPosition::MoveLeft()
+{
+	if (col > 0)
+	{
+		col--;
+		return true;
+	}
+
+	return false;
+}
+
 bool BoardPosition::MoveDownLeft()
 {
 	if (row < 7 && col > 0)
@@ -142,6 +164,28 @@ bool BoardPosition::Test(std::ostream & os)
 
 	testBP.MoveUp();
 	TEST(testBP.GetRow() == 2);
+
+	testBP.MoveLeft();
+	TEST(testBP.GetCol() == 2);
+
+	testBP.MoveRight();
+	TEST(testBP.GetCol() == 3);
+
+	testBP.MoveDownLeft();
+	TEST(testBP.GetRow() == 3);
+	TEST(testBP.GetCol() == 2);
+
+	testBP.MoveUpRight();
+	TEST(testBP.GetRow() == 2);
+	TEST(testBP.GetCol() == 3);
+
+	testBP.MoveDownRight();
+	TEST(testBP.GetRow() == 3);
+	TEST(testBP.GetCol() == 4);
+
+	testBP.MoveUpLeft();
+	TEST(testBP.GetRow() == 2);
+	TEST(testBP.GetCol() == 3);
 
 	TEST(testBP == BoardPosition(2, 3));
 

@@ -115,9 +115,17 @@ bool Pawn::Test(ostream & os)
 	TEST(testPawn.ThereIsAPieceInMyWay(BoardPosition(6, 3), testBoard) == true);
 	
 	testBoard->SetPiece(BoardPosition(5, 3), Piece::PAWN, Piece::BLACK);
-	unordered_set<BoardPosition> testMoves1 = testPawn.GetLegalMoves(BoardPosition(6, 4), testBoard);
-	unordered_set<BoardPosition> testMoves2 = {BoardPosition(5, 3), BoardPosition(5, 4), BoardPosition(4, 4)};
-	TEST(testMoves1 == testMoves2);
+	unordered_set<BoardPosition> testMoves = testPawn.GetLegalMoves(BoardPosition(6, 4), testBoard);
+	unordered_set<BoardPosition> testMovesAnswer = {BoardPosition(5, 3), BoardPosition(5, 4), BoardPosition(4, 4)};
+	TEST(testMoves == testMovesAnswer);
+
+	testMoves = testPawn.GetLegalMoves(BoardPosition(6, 3), testBoard);
+	testMovesAnswer = {};
+	TEST(testMoves == testMovesAnswer);
+
+	testMoves = testPawn.GetLegalMoves(BoardPosition(6, 0), testBoard);
+	testMovesAnswer = {BoardPosition(5, 0), BoardPosition(4, 0)};
+	TEST(testMoves == testMovesAnswer);
 
 	delete testBoard;
 	return success;

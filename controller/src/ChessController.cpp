@@ -14,13 +14,11 @@ using namespace std;
 ChessController::ChessController()
 {
 	facadePtr = new Facade;
-//	currentHighlightedSquaresPtr = new unordered_set<BoardPosition>;
 }
 
 ChessController::~ChessController()
 {
 	delete facadePtr;
-//	delete currentHighlightedSquaresPtr;
 }
 
 void ChessController::on_CellSelected(int row, int col, int button)
@@ -139,6 +137,14 @@ bool ChessController::on_DragEnd(int row,int col)
 
 void ChessController::on_NewGame()
 {
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			viewPtr->ClearPiece(i, j);
+		}
+	}
+
 	for (int i = 0; i < 8; i++)
 	{
 		viewPtr->PlacePiece(1, i, B_PAWN);

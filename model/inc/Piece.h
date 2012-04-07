@@ -39,6 +39,12 @@ public:
 protected:
 	int pieceType;
 	int pieceColor;
+
+	bool ContinuousCheck(const BoardPosition &,
+			const Board *, std::unordered_set<BoardPosition> &) const;
+	void CheckCell(const BoardPosition &,
+			const Board *, std::unordered_set<BoardPosition> &) const;
+
 };
 
 #endif /* PIECE_H_ */

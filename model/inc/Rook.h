@@ -14,6 +14,7 @@ class Rook : public Piece
 {
 public:
 	Rook(const int);
+	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
 };
 
 #endif /* ROOK_H_ */

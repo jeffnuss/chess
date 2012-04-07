@@ -49,3 +49,36 @@ Piece& Piece::operator =(const Piece & pieceToAssign)
 unordered_set<BoardPosition> Piece::GetLegalMoves(const BoardPosition &, const Board *) const
 {
 }
+
+bool Piece::ContinuousCheck(const BoardPosition & tempPos,
+		const Board * currentBoardPtr,
+		unordered_set<BoardPosition> & legalMoves) const
+{
+	bool keepChecking = true;
+	Piece * tempCell = currentBoardPtr->GetPiece(tempPos);
+	if (tempCell == NULL)
+	{
+		legalMoves.insert(tempPos);
+	}
+	else
+	{
+		if (tempCell->GetColor() != this->pieceColor)
+		{
+			legalMoves.insert(tempPos);
+		}
+		keepChecking = false;
+	}
+	return keepChecking;
+}
+
+void Piece::CheckCell(const BoardPosition & tempPos,
+		const Board * currentBoardPtr,
+		unordered_set<BoardPosition> & legalMoves) const
+{
+	Piece * tempCell = currentBoardPtr->GetPiece(tempPos);
+	if (tempCell == NULL
+			|| tempCell->GetColor() != this->pieceColor)
+	{
+		legalMoves.insert(tempPos);
+	}
+}
