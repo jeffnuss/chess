@@ -311,22 +311,30 @@ Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & 
 {
 	assert (!(moveFrom == moveTo));
 
-	Piece * temp = boardPtr->GetPiece(moveFrom);
-	if (boardPtr->GetPiece(moveTo) != NULL)
+	Piece * pieceToMove = boardPtr->GetPiece(moveFrom);
+	Piece * capturedPiece = boardPtr->GetPiece(moveTo);
+	Move pieceMove;
+
+	if (capturedPiece != NULL)
 	{
+		pieceMove = Move(pieceToMove, moveFrom, moveTo, capturedPiece, moveTo);
 		boardPtr->DeletePiece(moveTo);
-		// TODO: Tell move history about a capture
+		capturedPiece = NULL;
+	}
+	else
+	{
+		pieceMove = Move(pieceToMove, moveFrom, moveTo);
 	}
 
 	boardPtr->ClearCell(moveFrom);
-	boardPtr->SetPiece(moveTo, temp);
+	boardPtr->SetPiece(moveTo, pieceToMove);
 
 	whoseTurnIsIt++;
 	whoseTurnIsIt %= 2;
 
-	// TODO: Tell move history about the move
+	gameHistory.AddMove(pieceMove);
 
-	return temp;
+	return pieceToMove;
 }
 
 #ifndef NDEBUG

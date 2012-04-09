@@ -90,7 +90,10 @@ MY_OBJS =  $(CONT_OBJ)ChessController.o \
 	$(MODEL_OBJ)Rook.o \
 	$(MODEL_OBJ)Queen.o \
 	$(MODEL_OBJ)King.o \
-	$(MODEL_OBJ)BoardPosition.o
+	$(MODEL_OBJ)BoardPosition.o \
+	$(MODEL_OBJ)Move.o \
+	$(MODEL_OBJ)MoveHistory.o
+
 
 TEST_O = $(TEST_OBJ)Tester.o
 

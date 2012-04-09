@@ -10,6 +10,7 @@
 
 #include "Board.h"
 #include "BoardPosition.h"
+#include "MoveHistory.h"
 #include "../../test/inc/UnitTest.h"
 
 #ifndef FACADE_H_
@@ -33,6 +34,7 @@ public:
 private:
 	Board * boardPtr;
 	int whoseTurnIsIt;
+	MoveHistory gameHistory;
 
 	bool CheckStraight(BoardPosition &) const;
 	bool CheckForStraightAttack(const Piece *) const;
