@@ -8,7 +8,7 @@
 #ifndef MOVEHISTORY_H_
 #define MOVEHISTORY_H_
 
-#include <stack>
+#include <deque>
 
 #include "Move.h"
 
@@ -17,11 +17,14 @@ public:
 	MoveHistory();
 	void AddMove(const Move &);
 	Move & GetLastMove();
+	Move & GetFirstMove();
 	Move DeleteLastMove();
 	void Clear();
+	const std::deque<Move>::iterator GetFrontIterator() const;
+	const std::deque<Move>::iterator GetBackIterator() const;
 
 private:
-	std::stack<Move> moveHistory;
+	std::deque<Move> moveHistory;
 };
 
 #endif /* MOVEHISTORY_H_ */

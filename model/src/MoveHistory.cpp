@@ -13,25 +13,32 @@ MoveHistory::MoveHistory()
 
 void MoveHistory::AddMove(const Move & moveToAdd)
 {
-	moveHistory.push(moveToAdd);
+	moveHistory.push_front(moveToAdd);
 }
 
 Move & MoveHistory::GetLastMove()
 {
-	return moveHistory.top();
+	return moveHistory.front();
 }
 
 Move MoveHistory::DeleteLastMove()
 {
-	Move tempMove(moveHistory.top());
-	moveHistory.pop();
+	Move tempMove(moveHistory.front());
+	moveHistory.pop_front();
 	return tempMove;
 }
 
 void MoveHistory::Clear()
 {
-	while (!moveHistory.empty())
-	{
-		moveHistory.pop();
-	}
+	moveHistory.clear();
+}
+
+const deque<Move>::iterator MoveHistory::GetFrontIterator() const
+{
+	return moveHistory.begin();
+}
+
+const deque<Move>::iterator MoveHistory::GetBackIterator() const
+{
+	return moveHistory.end();
 }

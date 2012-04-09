@@ -190,7 +190,7 @@ void ChessController::on_NewGame()
 
 void ChessController::on_SaveGame()
 {
-	facadePtr->SaveGameAs("~/cs_240/Chess/test.xml");
+	facadePtr->SaveGameAs("/users/guest/j/jnuss/cs_240/Chess/test.xml");
 }
 
 void ChessController::on_SaveGameAs()

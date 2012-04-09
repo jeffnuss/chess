@@ -33,10 +33,12 @@ void GameSaver::SaveGame(const Board * boardPtr, const MoveHistory * gameHistory
 	outputFile << "<chessgame>" << endl;
 
 	outputFile << "\t" << "<board>" << endl;
-
 	OutputBoard(boardPtr, outputFile);
-
 	outputFile << "\t" << "</board>" << endl;
+
+	outputFile << "\t" << "<history>" << endl;
+	OutputHistory(gameHistory, outputFile);
+	outputFile << "\t" << "</history>" << endl;
 
 	outputFile << "</chessgame>" << endl;
 
@@ -45,18 +47,18 @@ void GameSaver::SaveGame(const Board * boardPtr, const MoveHistory * gameHistory
 
 void GameSaver::OutputBoard(const Board * boardPtr, ofstream & outputFile) const
 {
-	for (int i = 0; i < 7; i++)
+	for (int i = 0; i < 8; i++)
 	{
-		for (int j = 0; j < 7; j++)
+		for (int j = 0; j < 8; j++)
 		{
 			Piece * pieceToPrint = boardPtr->GetPiece(BoardPosition(i, j));
 			if (pieceToPrint != NULL)
 			{
-				outputFile << "\t\t" << "<type = \""
+				outputFile << "\t\t" << "<piece type = \""
 						<< GetPieceTypeString(pieceToPrint->GetType())
 						<< "\" color = \"" << GetPieceColorString(pieceToPrint->GetColor())
-						<< "\" column = \"" << i
-						<< "\" row = \"" << j
+						<< "\" column = \"" << j
+						<< "\" row = \"" << i
 						<< "\"/>" << endl;
 			}
 		}
@@ -98,6 +100,24 @@ string GameSaver::GetPieceColorString(const int pieceColor) const
 	case Piece::WHITE:
 		return "white";
 		break;
+	}
+}
+
+string GameSaver::PiecePrinter(ofstream & outputFile, const Piece * pieceToPrint, const int row, const int col) const
+{
+
+}
+
+void GameSaver::OutputHistory(const MoveHistory * gameHistory, ofstream & outputFile) const
+{
+	deque<Move>::iterator iter = gameHistory->GetFrontIterator();
+	deque<Move>::iterator endIter = gameHistory->GetBackIterator();
+
+	while (iter != gameHistory)
+	{
+		outputFile << "\t\t" << "<move>" << endl;
+		outputFile << "\t\t\t" << ""
+		iter++;
 	}
 }
 
