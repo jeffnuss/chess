@@ -33,7 +33,7 @@ public:
 	void on_TimerEvent();
 	void SetView(IChessView * view);
 	void HighlightMoves(const BoardPosition &);
-	void ClearCurrentHighlights(std::unordered_set<BoardPosition> &);
+	void ClearCurrentHighlights();
 	void MovePiece(const BoardPosition &, const BoardPosition, const Piece *);
 	ImageName GetPieceImage(const int, const int) const;
 

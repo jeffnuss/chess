@@ -14,12 +14,15 @@ using namespace std;
 Facade::Facade()
 {
 	boardPtr = new Board;
+	gameHistory = new MoveHistory;
 	whoseTurnIsIt = Piece::BLACK;
 }
 
 Facade::~Facade()
 {
 	delete boardPtr;
+	delete gameHistory;
+	delete gameSaver;
 }
 
 void Facade::NewGame()
@@ -331,14 +334,14 @@ Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & 
 
 	SwitchTurns();
 
-	gameHistory.AddMove(pieceMove);
+	gameHistory->AddMove(pieceMove);
 
 	return pieceToMove;
 }
 
 Move Facade::UndoLastMove()
 {
-	Move lastMove = gameHistory.DeleteLastMove();
+	Move lastMove = gameHistory->DeleteLastMove();
 
 	boardPtr->SetPiece(lastMove.GetOriginPosition(),
 			boardPtr->GetPiece(lastMove.GetDestinationPosition()));
@@ -350,15 +353,24 @@ Move Facade::UndoLastMove()
 				lastMove.GetCapturedPieceType(), lastMove.GetCapturedPieceColor());
 	}
 
-
 	SwitchTurns();
 	return lastMove;
 }
 
 void Facade::SwitchTurns()
 {
-	whoseTurnIsIt++;
-	whoseTurnIsIt %= 2;
+	whoseTurnIsIt ^= 1;
+}
+
+void Facade::SaveGameAs(const string & fileName)
+{
+	gameSaver = new GameSaver(fileName);
+	gameSaver->SaveGameAs(fileName, boardPtr, gameHistory);
+}
+
+void Facade::SameGame() const
+{
+	gameSaver->SaveGame(boardPtr, gameHistory);
 }
 
 #ifndef NDEBUG

@@ -81,7 +81,9 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 # This macro should be used to store all of the object files created 
 # from *your* source files
 MY_OBJS =  $(CONT_OBJ)ChessController.o \
-	$(MODEL_OBJ)Facade.o \
+	$(foreach file, $(MODEL_SOURCES), $(MODEL_OBJ)$(file).o) \
+	$(foreach file, $(DATA_SOURCES), $(DATA_OBJ)$(file).o)
+	#$(MODEL_OBJ)Facade.o \
 	$(MODEL_OBJ)Board.o \
 	$(MODEL_OBJ)Piece.o \
 	$(MODEL_OBJ)Pawn.o \
@@ -135,6 +137,7 @@ clean:
 	@rm -f $(MODEL_OBJ)*.o
 	@rm -f $(VIEW_OBJ)*.o
 	@rm -f $(CONT_OBJ)*.o
+	@rm -f $(DATA_OBJ)*.o
 	@rm -f $(TEST_OBJ)*.o
 	@rm -f $(EXE)
 	@rm -f $(MEXE)
@@ -204,6 +207,9 @@ $(TEST_OBJ)Tester.o: $(TEST_SRC)Tester.cpp $(LIB)
 $(MODEL_OBJ)%.o : $(MODEL_SRC)%.cpp
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -c $(LOG_FLAG) -o $@ $<
 	
+$(DATA_OBJ)%.o : $(DATA_SRC)%.cpp
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -c $(LOG_FLAG) -o $@ $<
+
 $(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h $(MODEL_INC)Facade.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
 

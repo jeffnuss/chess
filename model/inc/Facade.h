@@ -11,6 +11,7 @@
 #include "Board.h"
 #include "BoardPosition.h"
 #include "MoveHistory.h"
+#include "../../data/inc/GameSaver.h"
 #include "../../test/inc/UnitTest.h"
 
 #ifndef FACADE_H_
@@ -28,6 +29,8 @@ public:
 	Piece * MovePiece(const BoardPosition &, const BoardPosition &);
 	Move UndoLastMove();
 	void SwitchTurns();
+	void SaveGameAs(const std::string &);
+	void SameGame() const;
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);
@@ -36,7 +39,8 @@ public:
 private:
 	Board * boardPtr;
 	int whoseTurnIsIt;
-	MoveHistory gameHistory;
+	MoveHistory * gameHistory;
+	GameSaver * gameSaver;
 
 	bool CheckStraight(BoardPosition &) const;
 	bool CheckForStraightAttack(const Piece *) const;

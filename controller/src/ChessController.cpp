@@ -30,7 +30,7 @@ void ChessController::on_CellSelected(int row, int col, int button)
 	{
 		Piece * pieceToMove = facadePtr->MovePiece(currentSelectedCell, newSelectedCell);
 		MovePiece(currentSelectedCell, newSelectedCell, pieceToMove);
-		ClearCurrentHighlights(currentHighlightedCells);
+		ClearCurrentHighlights();
 		currentHighlightedCells.clear();
 		if (facadePtr->CheckForCheck())
 		{
@@ -51,7 +51,7 @@ void ChessController::on_CellSelected(int row, int col, int button)
 
 void ChessController::HighlightMoves(const BoardPosition & positionToCheck)
 {
-	ClearCurrentHighlights(currentHighlightedCells);
+	ClearCurrentHighlights();
 
 	unordered_set<BoardPosition> possibleMoves = facadePtr->GetValidMoves(positionToCheck);
 	unordered_set<BoardPosition>::iterator iter = possibleMoves.begin();
@@ -63,10 +63,10 @@ void ChessController::HighlightMoves(const BoardPosition & positionToCheck)
 	currentHighlightedCells = possibleMoves;
 }
 
-void ChessController::ClearCurrentHighlights(unordered_set<BoardPosition> & setToClear)
+void ChessController::ClearCurrentHighlights()
 {
-	unordered_set<BoardPosition>::iterator iter1 = setToClear.begin();
-	while (iter1 != setToClear.end())
+	unordered_set<BoardPosition>::iterator iter1 = currentHighlightedCells.begin();
+	while (iter1 != currentHighlightedCells.end())
 	{
 		viewPtr->UnHighlightSquare((*iter1).GetRow(), (*iter1).GetCol());
 		iter1++;
@@ -190,7 +190,7 @@ void ChessController::on_NewGame()
 
 void ChessController::on_SaveGame()
 {
-
+	facadePtr->SaveGameAs("~/cs_240/Chess/test.xml");
 }
 
 void ChessController::on_SaveGameAs()
@@ -205,6 +205,8 @@ void ChessController::on_LoadGame()
 
 void ChessController::on_UndoMove()
 {
+	ClearCurrentHighlights();
+
 	Move lastMove = facadePtr->UndoLastMove();
 	BoardPosition moveOrigin = lastMove.GetOriginPosition();
 	BoardPosition moveDestination = lastMove.GetDestinationPosition();
