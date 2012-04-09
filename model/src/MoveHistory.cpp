@@ -23,7 +23,7 @@ Move & MoveHistory::GetLastMove()
 
 Move MoveHistory::DeleteLastMove()
 {
-	Move tempMove = moveHistory.top();
+	Move tempMove(moveHistory.top());
 	moveHistory.pop();
 	return tempMove;
 }

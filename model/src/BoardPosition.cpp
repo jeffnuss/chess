@@ -13,17 +13,15 @@ using namespace std;
 BoardPosition::BoardPosition()
 {
 	// TODO Auto-generated constructor stub
+}
 
+BoardPosition::BoardPosition(const BoardPosition & other)
+	: row(other.row), col(other.col)
+{
 }
 
 BoardPosition::BoardPosition(int row, int col) : row(row), col(col)
 {
-}
-
-BoardPosition::BoardPosition(const BoardPosition & other)
-{
-	this->row = other.row;
-	this->col = other.col;
 }
 
 BoardPosition::~BoardPosition()

@@ -35,6 +35,7 @@ public:
 	void HighlightMoves(const BoardPosition &);
 	void ClearCurrentHighlights(std::unordered_set<BoardPosition> &);
 	void MovePiece(const BoardPosition &, const BoardPosition, const Piece *);
+	ImageName GetPieceImage(const int, const int) const;
 
 private:
 	IChessView * viewPtr;

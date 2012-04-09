@@ -81,6 +81,15 @@ void ChessController::MovePiece(const BoardPosition & moveFrom, const BoardPosit
 	int pieceColor = pieceToMove->GetColor();
 	int pieceType = pieceToMove->GetType();
 
+	pieceToPlace = GetPieceImage(pieceColor, pieceType);
+
+	viewPtr->PlacePiece(moveTo.GetRow(), moveTo.GetCol(), pieceToPlace);
+}
+
+ImageName ChessController::GetPieceImage(const int pieceColor, const int pieceType) const
+{
+	ImageName pieceToPlace;
+
 	if (pieceColor == 0)
 	{
 		switch (pieceType)
@@ -130,7 +139,7 @@ void ChessController::MovePiece(const BoardPosition & moveFrom, const BoardPosit
 		}
 	}
 
-	viewPtr->PlacePiece(moveTo.GetRow(), moveTo.GetCol(), pieceToPlace);
+	return pieceToPlace;
 }
 
 void ChessController::on_DragStart(int row,int col)
@@ -196,6 +205,23 @@ void ChessController::on_LoadGame()
 
 void ChessController::on_UndoMove()
 {
+	Move lastMove = facadePtr->UndoLastMove();
+	BoardPosition moveOrigin = lastMove.GetOriginPosition();
+	BoardPosition moveDestination = lastMove.GetDestinationPosition();
+	int capturedPieceType = lastMove.GetCapturedPieceType();
+
+	viewPtr->ClearPiece(moveDestination.GetRow(), moveDestination.GetCol());
+	if (capturedPieceType != -1)
+	{
+		BoardPosition capturedPostion = lastMove.GetCapturedPiecePosition();
+		viewPtr->PlacePiece(capturedPostion.GetRow(),
+				capturedPostion.GetCol(),
+				GetPieceImage(lastMove.GetCapturedPieceColor(), capturedPieceType));
+	}
+
+	viewPtr->PlacePiece(lastMove.GetOriginPosition().GetRow(),
+			lastMove.GetOriginPosition().GetCol(),
+			GetPieceImage(lastMove.GetPieceColor(), lastMove.GetPieceType()));
 
 }
 

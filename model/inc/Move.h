@@ -15,8 +15,17 @@ class Move
 {
 public:
 	Move();
+	Move(const Move &);
 	Move(const Piece *, const BoardPosition &, const BoardPosition &);
 	Move(const Piece *, const BoardPosition &, const BoardPosition &, const Piece *, const BoardPosition &);
+
+	int GetPieceType() const;
+	int GetPieceColor() const;
+	BoardPosition GetOriginPosition() const;
+	BoardPosition GetDestinationPosition() const;
+	int GetCapturedPieceType() const;
+	int GetCapturedPieceColor() const;
+	BoardPosition GetCapturedPiecePosition() const;
 
 private:
 	int pieceType;

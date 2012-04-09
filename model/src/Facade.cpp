@@ -329,12 +329,36 @@ Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & 
 	boardPtr->ClearCell(moveFrom);
 	boardPtr->SetPiece(moveTo, pieceToMove);
 
-	whoseTurnIsIt++;
-	whoseTurnIsIt %= 2;
+	SwitchTurns();
 
 	gameHistory.AddMove(pieceMove);
 
 	return pieceToMove;
+}
+
+Move Facade::UndoLastMove()
+{
+	Move lastMove = gameHistory.DeleteLastMove();
+
+	boardPtr->SetPiece(lastMove.GetOriginPosition(),
+			boardPtr->GetPiece(lastMove.GetDestinationPosition()));
+	boardPtr->ClearCell(lastMove.GetDestinationPosition());
+
+	if (lastMove.GetCapturedPieceType() != -1)
+	{
+		boardPtr->SetPiece(lastMove.GetCapturedPiecePosition(),
+				lastMove.GetCapturedPieceType(), lastMove.GetCapturedPieceColor());
+	}
+
+
+	SwitchTurns();
+	return lastMove;
+}
+
+void Facade::SwitchTurns()
+{
+	whoseTurnIsIt++;
+	whoseTurnIsIt %= 2;
 }
 
 #ifndef NDEBUG

@@ -11,6 +11,16 @@ Move::Move()
 {
 }
 
+Move::Move(const Move & other)
+	: pieceType(other.pieceType),
+	  pieceColor(other.pieceColor),
+	  moveFrom(other.moveFrom),
+	  moveTo(other.moveTo),
+	  capturedPieceType(other.capturedPieceType),
+	  caputuredPiecePosition(other.caputuredPiecePosition)
+{
+}
+
 Move::Move(const Piece * movedPiece, const BoardPosition & moveFrom,
 		const BoardPosition & moveTo)
 		: pieceType(movedPiece->GetType()),
@@ -34,3 +44,37 @@ Move::Move(const Piece * movedPiece, const BoardPosition & moveFrom,
 {
 }
 
+int Move::GetPieceType() const
+{
+	return pieceType;
+}
+
+int Move::GetPieceColor() const
+{
+	return pieceColor;
+}
+
+BoardPosition Move::GetOriginPosition() const
+{
+	return moveFrom;
+}
+
+BoardPosition Move::GetDestinationPosition() const
+{
+	return moveTo;
+}
+
+int Move::GetCapturedPieceType() const
+{
+	return capturedPieceType;
+}
+
+int Move::GetCapturedPieceColor() const
+{
+	return (pieceType == Piece::BLACK ? Piece::WHITE : Piece::BLACK);
+}
+
+BoardPosition Move::GetCapturedPiecePosition() const
+{
+	return caputuredPiecePosition;
+}

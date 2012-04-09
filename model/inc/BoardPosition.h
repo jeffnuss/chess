@@ -13,8 +13,8 @@
 class BoardPosition {
 public:
 	BoardPosition();
-	BoardPosition(int, int);
 	BoardPosition(const BoardPosition &);
+	BoardPosition(int, int);
 	~BoardPosition();
 	int GetRow() const;
 	int GetCol() const;

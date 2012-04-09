@@ -26,6 +26,8 @@ public:
 	bool WillKingBeInCheck(const std::unordered_set<BoardPosition> &) const;
 	bool CheckForCheckMate(const std::unordered_set<BoardPosition> &) const;
 	Piece * MovePiece(const BoardPosition &, const BoardPosition &);
+	Move UndoLastMove();
+	void SwitchTurns();
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);
