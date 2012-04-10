@@ -12,6 +12,7 @@
 #include "BoardPosition.h"
 #include "MoveHistory.h"
 #include "../../data/inc/GameSaver.h"
+#include "../../data/inc/GameLoader.h"
 #include "../../test/inc/UnitTest.h"
 
 #ifndef FACADE_H_
@@ -31,7 +32,9 @@ public:
 	void SwitchTurns();
 	void SaveGameAs(const std::string &);
 	bool SaveGame() const;
-	bool Checkmate();
+	bool LoadGame(const std::string &) const;
+	bool Checkmate() const;
+	bool Stalemate() const;
 	bool AnyMovesMadeYet() const;
 	int WhoseTurnIsIt() const;
 	bool ShouldIHighlighThisCell(const BoardPosition &) const;

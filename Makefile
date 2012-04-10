@@ -64,7 +64,7 @@ MODEL_SOURCES = $(foreach file, $(shell ls model/src/*.cpp), $(basename $(notdir
 DATA_SOURCES = $(foreach file, $(shell ls data/src/*.cpp), $(basename $(notdir $(file)))) 
 
 # Macros for compilation flags
-INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I$(TEST_INC)
+INCLUDES = -I$(MODEL_INC) -I$(VIEW_INC) -I$(CONT_INC) -I$(TEST_INC) -I$(DATA_INC)
 DEBUG = -g # Uncomment this if you want to compile with debug info
 
 # Uncomment the flag on this next line to turn off the logging messages from the

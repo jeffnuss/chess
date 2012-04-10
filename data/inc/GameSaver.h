@@ -8,9 +8,9 @@
 #ifndef GAMESAVER_H_
 #define GAMESAVER_H_
 
-#include "Board.h"
-#include "MoveHistory.h"
-#include "Move.h"
+#include "../../model/inc/Board.h"
+#include "../../model/inc/MoveHistory.h"
+#include "../../model/inc/Move.h"
 
 class GameSaver
 {

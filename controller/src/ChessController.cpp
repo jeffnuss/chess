@@ -43,6 +43,10 @@ void ChessController::on_CellSelected(int row, int col, int button)
 		{
 			viewPtr->SetStatusBar("Check");
 		}
+		else if (facadePtr->Stalemate())
+		{
+			viewPtr->SetStatusBar("Stalemate");
+		}
 		else
 		{
 			viewPtr->SetStatusBar("");

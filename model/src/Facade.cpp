@@ -442,7 +442,6 @@ bool Facade::WillKingBeInCheck(const BoardPosition & originalPosition,
 		if (CheckForCheck(whoseTurnIsIt ^ 1))
 		{
 			toDelete.insert(*iter);
-//			possibleMoves.erase(*iter);
 			inCheck = true;
 		}
 		UndoLastMove();
@@ -564,6 +563,19 @@ bool Facade::SaveGame() const
 	return false;
 }
 
+bool Facade::LoadGame(const string & filePath) const
+{
+	NewGame();
+	delete boardPtr;
+	boardPtr = new Board();
+	GameLoader * loader = new GameLoader();
+	loader->LoadGame(filePath, boardPtr, gameHistory);
+
+
+
+}
+
+
 bool Facade::AnyMovesMadeYet() const
 {
 	return !gameHistory->IsEmpty();
@@ -584,6 +596,11 @@ bool Facade::ShouldIHighlighThisCell(const BoardPosition & positionToCheck) cons
 		return false;
 	}
 	return tempPiece->GetColor() == whoseTurnIsIt;
+}
+
+bool Facade::Stalemate() const
+{
+	return stalemate;
 }
 
 #ifndef NDEBUG
@@ -631,6 +648,33 @@ bool Facade::Test(ostream & os)
 	unordered_set<BoardPosition> kingCheck1 = testFacade.GetValidMoves(BoardPosition(3,3));
 	unordered_set<BoardPosition> kingCheck2 = {BoardPosition(4,2)};
 	TEST(kingCheck1 == kingCheck2);
+
+	testFacade.NewGame();
+	testFacade.MovePiece(BoardPosition(6,4), BoardPosition(4,5));
+	testFacade.MovePiece(BoardPosition(1,0), BoardPosition(3,0));
+	testFacade.MovePiece(BoardPosition(7,3), BoardPosition(3,7));
+	testFacade.MovePiece(BoardPosition(0,0), BoardPosition(2,0));
+	testFacade.MovePiece(BoardPosition(3,7), BoardPosition(3,0));
+	testFacade.MovePiece(BoardPosition(1,7), BoardPosition(3,7));
+	testFacade.MovePiece(BoardPosition(3,0), BoardPosition(1,2));
+	testFacade.MovePiece(BoardPosition(2,0), BoardPosition(2,7));
+	testFacade.MovePiece(BoardPosition(6,7), BoardPosition(4,7));
+	testFacade.MovePiece(BoardPosition(1,5), BoardPosition(2,5));
+	testFacade.MovePiece(BoardPosition(1,2), BoardPosition(1,3));
+	testFacade.MovePiece(BoardPosition(0,4), BoardPosition(1,5));
+	testFacade.MovePiece(BoardPosition(1,3), BoardPosition(1,1));
+	testFacade.MovePiece(BoardPosition(0,3), BoardPosition(5,3));
+	testFacade.MovePiece(BoardPosition(1,1), BoardPosition(0,1));
+	testFacade.MovePiece(BoardPosition(5,3), BoardPosition(1,7));
+	testFacade.MovePiece(BoardPosition(0,1), BoardPosition(0,2));
+	testFacade.MovePiece(BoardPosition(1,5), BoardPosition(2,6));
+	testFacade.MovePiece(BoardPosition(0,2), BoardPosition(2,4));
+
+	TEST(!testFacade.CheckForCheck(Piece::BLACK));
+	TEST(!testFacade.CheckForCheckmate(Piece::BLACK));
+	TEST(testFacade.stalemate == testFacade.Stalemate());
+	TEST(testFacade.stalemate);
+
 
 	return success;
 }
