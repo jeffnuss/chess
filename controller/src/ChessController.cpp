@@ -14,6 +14,7 @@ using namespace std;
 ChessController::ChessController()
 {
 	facadePtr = new Facade;
+	currentSelectedCell = BoardPosition(-1, -1);
 }
 
 ChessController::~ChessController()
@@ -24,6 +25,7 @@ ChessController::~ChessController()
 void ChessController::on_CellSelected(int row, int col, int button)
 {
 	BoardPosition newSelectedCell(row, col);
+	currentHighlightedCells.erase(currentSelectedCell);
 
 	// Check to see if the newSelectedCell was highlighted
 	if (currentHighlightedCells.find(newSelectedCell) != currentHighlightedCells.end())
@@ -32,7 +34,12 @@ void ChessController::on_CellSelected(int row, int col, int button)
 		MovePiece(currentSelectedCell, newSelectedCell, pieceToMove);
 		ClearCurrentHighlights();
 		currentHighlightedCells.clear();
-		if (facadePtr->CheckForCheck())
+
+		if (facadePtr->CheckForCheckmate(facadePtr->WhoseTurnIsIt()))
+		{
+			viewPtr->SetStatusBar("Checkmate");
+		}
+		else if (facadePtr->CheckForCheck(facadePtr->WhoseTurnIsIt()))
 		{
 			viewPtr->SetStatusBar("Check");
 		}
@@ -60,7 +67,14 @@ void ChessController::HighlightMoves(const BoardPosition & positionToCheck)
 		viewPtr->HighlightSquare((*iter).GetRow(), (*iter).GetCol(), BLUE_SQUARE);
 		iter++;
 	}
+
 	currentHighlightedCells = possibleMoves;
+
+	if (facadePtr->ShouldIHighlighThisCell(positionToCheck))
+	{
+		viewPtr->HighlightSquare(positionToCheck.GetRow(), positionToCheck.GetCol(), GREEN_SQUARE);
+		currentHighlightedCells.insert(positionToCheck);
+	}
 }
 
 void ChessController::ClearCurrentHighlights()
@@ -71,6 +85,7 @@ void ChessController::ClearCurrentHighlights()
 		viewPtr->UnHighlightSquare((*iter1).GetRow(), (*iter1).GetCol());
 		iter1++;
 	}
+	viewPtr->UnHighlightSquare(currentSelectedCell.GetRow(), currentSelectedCell.GetCol());
 }
 
 void ChessController::MovePiece(const BoardPosition & moveFrom, const BoardPosition moveTo, const Piece * pieceToMove)
@@ -190,12 +205,16 @@ void ChessController::on_NewGame()
 
 void ChessController::on_SaveGame()
 {
-	facadePtr->SaveGameAs("/users/guest/j/jnuss/cs_240/Chess/test.xml");
+	if (!facadePtr->SaveGame())
+	{
+		on_SaveGameAs();
+	}
 }
 
 void ChessController::on_SaveGameAs()
 {
-
+	string filePath = viewPtr->SelectSaveFile();
+	facadePtr->SaveGameAs(filePath);
 }
 
 void ChessController::on_LoadGame()
@@ -205,31 +224,47 @@ void ChessController::on_LoadGame()
 
 void ChessController::on_UndoMove()
 {
-	ClearCurrentHighlights();
 
-	Move lastMove = facadePtr->UndoLastMove();
-	BoardPosition moveOrigin = lastMove.GetOriginPosition();
-	BoardPosition moveDestination = lastMove.GetDestinationPosition();
-	int capturedPieceType = lastMove.GetCapturedPieceType();
-
-	viewPtr->ClearPiece(moveDestination.GetRow(), moveDestination.GetCol());
-	if (capturedPieceType != -1)
+	if (facadePtr->AnyMovesMadeYet())
 	{
-		BoardPosition capturedPostion = lastMove.GetCapturedPiecePosition();
-		viewPtr->PlacePiece(capturedPostion.GetRow(),
-				capturedPostion.GetCol(),
-				GetPieceImage(lastMove.GetCapturedPieceColor(), capturedPieceType));
+		Move lastMove = facadePtr->UndoLastMove();
+		BoardPosition moveOrigin = lastMove.GetOriginPosition();
+		ClearCurrentHighlights();
+
+		BoardPosition moveDestination = lastMove.GetDestinationPosition();
+		int capturedPieceType = lastMove.GetCapturedPieceType();
+
+		viewPtr->ClearPiece(moveDestination.GetRow(), moveDestination.GetCol());
+		if (capturedPieceType != -1)
+		{
+			BoardPosition capturedPostion = lastMove.GetCapturedPiecePosition();
+			viewPtr->PlacePiece(capturedPostion.GetRow(), capturedPostion.GetCol(),
+					GetPieceImage(lastMove.GetCapturedPieceColor(), capturedPieceType));
+		}
+
+		viewPtr->PlacePiece(lastMove.GetOriginPosition().GetRow(),
+				lastMove.GetOriginPosition().GetCol(),
+				GetPieceImage(lastMove.GetPieceColor(),
+				lastMove.GetPieceType()));
+
+		if (facadePtr->CheckForCheck(facadePtr->WhoseTurnIsIt()))
+		{
+			viewPtr->SetStatusBar("Check");
+		}
+		else
+		{
+			viewPtr->SetStatusBar("");
+		}
 	}
 
-	viewPtr->PlacePiece(lastMove.GetOriginPosition().GetRow(),
-			lastMove.GetOriginPosition().GetCol(),
-			GetPieceImage(lastMove.GetPieceColor(), lastMove.GetPieceType()));
-
+	else
+	{
+		viewPtr->SetStatusBar("No moves to undo");
+	}
 }
 
 void ChessController::on_QuitGame()
 {
-
 }
 
 void ChessController::on_TimerEvent()

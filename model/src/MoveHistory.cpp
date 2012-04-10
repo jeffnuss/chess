@@ -7,6 +7,8 @@
 
 #include "../inc/MoveHistory.h"
 
+using namespace std;
+
 MoveHistory::MoveHistory()
 {
 }
@@ -33,12 +35,19 @@ void MoveHistory::Clear()
 	moveHistory.clear();
 }
 
-const deque<Move>::iterator MoveHistory::GetFrontIterator() const
+deque<Move>::const_reverse_iterator MoveHistory::GetReverseFrontIterator() const
 {
-	return moveHistory.begin();
+	return moveHistory.rbegin();
 }
 
-const deque<Move>::iterator MoveHistory::GetBackIterator() const
+deque<Move>::const_reverse_iterator MoveHistory::GetReverseBackIterator() const
 {
-	return moveHistory.end();
+	return moveHistory.rend();
 }
+
+bool MoveHistory::IsEmpty() const
+{
+	return moveHistory.empty();
+}
+
+

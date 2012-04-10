@@ -15,7 +15,9 @@ Facade::Facade()
 {
 	boardPtr = new Board;
 	gameHistory = new MoveHistory;
-	whoseTurnIsIt = Piece::BLACK;
+	gameSaver = NULL;
+	whoseTurnIsIt = Piece::WHITE;
+	checkmate = false;
 }
 
 Facade::~Facade()
@@ -28,30 +30,41 @@ Facade::~Facade()
 void Facade::NewGame()
 {
 	boardPtr->Reset();
-	whoseTurnIsIt = Piece::BLACK;
+	if (gameSaver != NULL)
+	{
+		delete gameHistory;
+		gameHistory = new MoveHistory;
+		delete gameSaver;
+		gameSaver = NULL;
+	}
+	whoseTurnIsIt = Piece::WHITE;
+	stalemate = false;
+	checkmate = false;
 }
 
-unordered_set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck) const
+unordered_set<BoardPosition> Facade::GetValidMoves(const BoardPosition & positionToCheck)
 {
 	Piece * pieceToCheck = boardPtr->GetPiece(positionToCheck);
 	unordered_set<BoardPosition> possibleMoves;
 
-	if (pieceToCheck != NULL && pieceToCheck->GetColor() == whoseTurnIsIt)
+	if (!checkmate
+			&& !stalemate
+			&& pieceToCheck != NULL
+			&& pieceToCheck->GetColor() == whoseTurnIsIt)
 	{
 		possibleMoves = pieceToCheck->GetLegalMoves(positionToCheck, boardPtr);
-		WillKingBeInCheck(possibleMoves);
-		CheckForCheckMate(possibleMoves);
+		WillKingBeInCheck(positionToCheck, possibleMoves);
 	}
 
 	return possibleMoves;
 }
 
-bool Facade::CheckForCheck() const
+bool Facade::CheckForCheck(int colorToCheck) const
 {
 	bool isKingInCheck = false;
 	BoardPosition tempPos;
 
-	if (whoseTurnIsIt != Piece::WHITE)
+	if (colorToCheck == Piece::BLACK)
 	{
 		tempPos = boardPtr->GetBlackKingPostion();
 	}
@@ -60,9 +73,10 @@ bool Facade::CheckForCheck() const
 		tempPos = boardPtr->GetWhiteKingPostion();
 	}
 
-	if (CheckStraight(tempPos)
-			|| CheckDiagonal(tempPos)
-			|| CheckKnightPositions(tempPos))
+	if (CheckStraight(tempPos, colorToCheck)
+			|| CheckDiagonal(tempPos, colorToCheck)
+			|| CheckKnightPositions(tempPos, colorToCheck)
+			|| CheckKingPositions(tempPos, colorToCheck))
 	{
 		isKingInCheck = true;
 	}
@@ -70,13 +84,13 @@ bool Facade::CheckForCheck() const
 	return isKingInCheck;
 }
 
-bool Facade::CheckStraight(BoardPosition & currentKingPos) const
+bool Facade::CheckStraight(BoardPosition & currentKingPos, const int colorToCheck) const
 {
 	BoardPosition tempPos = currentKingPos;
 
 	while (tempPos.MoveUp() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -84,7 +98,7 @@ bool Facade::CheckStraight(BoardPosition & currentKingPos) const
 	tempPos = currentKingPos;
 	while (tempPos.MoveRight() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -92,7 +106,7 @@ bool Facade::CheckStraight(BoardPosition & currentKingPos) const
 	tempPos = currentKingPos;
 	while (tempPos.MoveDown() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -100,7 +114,7 @@ bool Facade::CheckStraight(BoardPosition & currentKingPos) const
 	tempPos = currentKingPos;
 	while (tempPos.MoveLeft() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForStraightAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -108,9 +122,9 @@ bool Facade::CheckStraight(BoardPosition & currentKingPos) const
 	return false;
 }
 
-bool Facade::CheckForStraightAttack(const Piece * tempPiece) const
+bool Facade::CheckForStraightAttack(const Piece * tempPiece, const int colorToCheck) const
 {
-	if (tempPiece->GetColor() != whoseTurnIsIt
+	if (tempPiece->GetColor() != colorToCheck
 			&& (tempPiece->GetType() == Piece::ROOK
 				|| tempPiece->GetType() == Piece::QUEEN))
 	{
@@ -119,13 +133,13 @@ bool Facade::CheckForStraightAttack(const Piece * tempPiece) const
 	return false;
 }
 
-bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
+bool Facade::CheckDiagonal(BoardPosition & currentKingPos, const int colorToCheck) const
 {
 	BoardPosition tempPos = currentKingPos;
 
 	while (tempPos.MoveUpRight() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -133,7 +147,7 @@ bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 	tempPos = currentKingPos;
 	while (tempPos.MoveDownRight() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -141,7 +155,7 @@ bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 	tempPos = currentKingPos;
 	while (tempPos.MoveDownLeft() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -149,7 +163,7 @@ bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 	tempPos = currentKingPos;
 	while (tempPos.MoveUpLeft() && boardPtr->GetPiece(tempPos) == NULL);
 	if (boardPtr->GetPiece(tempPos) != NULL
-			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos)))
+			&& CheckForDiagonalAttack(boardPtr->GetPiece(tempPos), colorToCheck))
 	{
 		return true;
 	}
@@ -159,7 +173,7 @@ bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 	tempPos.MoveUpRight();
 	Piece * tempPiece = boardPtr->GetPiece(tempPos);
 	if (tempPiece != NULL
-			&& tempPiece->GetColor() != whoseTurnIsIt
+			&& tempPiece->GetColor() != colorToCheck
 			&& tempPiece->GetType() == Piece::PAWN)
 	{
 		return true;
@@ -169,18 +183,41 @@ bool Facade::CheckDiagonal(BoardPosition & currentKingPos) const
 	tempPos.MoveUpLeft();
 	tempPiece = boardPtr->GetPiece(tempPos);
 	if (tempPiece != NULL
-			&& tempPiece->GetColor() != whoseTurnIsIt
+			&& tempPiece->GetColor() != colorToCheck
 			&& tempPiece->GetType() == Piece::PAWN)
 	{
 		return true;
 	}
 
+
+	tempPos = currentKingPos;
+	tempPos.MoveDownRight();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::PAWN)
+	{
+		return true;
+	}
+
+
+	tempPos = currentKingPos;
+	tempPos.MoveDownLeft();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::PAWN)
+	{
+		return true;
+	}
+
+
 	return false;
 }
 
-bool Facade::CheckForDiagonalAttack(const Piece * tempPiece) const
+bool Facade::CheckForDiagonalAttack(const Piece * tempPiece, const int colorToCheck) const
 {
-	if (tempPiece->GetColor() != whoseTurnIsIt
+	if (tempPiece->GetColor() != colorToCheck
 			&& (tempPiece->GetType() == Piece::BISHOP
 				|| tempPiece->GetType() == Piece::QUEEN))
 	{
@@ -189,7 +226,7 @@ bool Facade::CheckForDiagonalAttack(const Piece * tempPiece) const
 	return false;
 }
 
-bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
+bool Facade::CheckKnightPositions(BoardPosition & currentKingPos, const int colorToCheck) const
 {
 	BoardPosition tempPos = currentKingPos;
 	Piece * tempPiece;
@@ -199,7 +236,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -212,7 +249,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -225,7 +262,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -238,7 +275,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -251,7 +288,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -264,7 +301,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -277,7 +314,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -290,7 +327,7 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	{
 		tempPiece = boardPtr->GetPiece(tempPos);
 		if (tempPiece != NULL
-				&& tempPiece->GetColor() != whoseTurnIsIt
+				&& tempPiece->GetColor() != colorToCheck
 				&& tempPiece->GetType() == Piece::KNIGHT)
 		{
 			return true;
@@ -300,19 +337,163 @@ bool Facade::CheckKnightPositions(BoardPosition & currentKingPos) const
 	return false;
 }
 
-bool Facade::WillKingBeInCheck(const std::unordered_set<BoardPosition> & possibleMoves) const
+bool Facade::CheckKingPositions(BoardPosition & currentKingPos, const int colorToCheck) const
 {
-	
+	BoardPosition tempPos = currentKingPos;
+	Piece * tempPiece;
+
+	// Add special check for kings
+	tempPos = currentKingPos;
+	tempPos.MoveDown();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveDownLeft();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveLeft();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveUpLeft();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveUp();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveUpRight();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveRight();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	tempPos = currentKingPos;
+	tempPos.MoveDownRight();
+	tempPiece = boardPtr->GetPiece(tempPos);
+	if (tempPiece != NULL
+			&& tempPiece->GetColor() != colorToCheck
+			&& tempPiece->GetType() == Piece::KING)
+	{
+		return true;
+	}
+
+	return false;
 }
 
-bool Facade::CheckForCheckMate(const std::unordered_set<BoardPosition> & possibleMoves) const
+bool Facade::WillKingBeInCheck(const BoardPosition & originalPosition,
+		unordered_set<BoardPosition> & possibleMoves)
 {
+	bool inCheck = false;
+	unordered_set<BoardPosition>::iterator iter = possibleMoves.begin();
+	unordered_set<BoardPosition>::iterator iterEnd = possibleMoves.end();
+	unordered_set<BoardPosition> toDelete;
 
+	while (iter != iterEnd)
+	{
+		int row = iter->GetRow();
+		int col = iter->GetCol();
+		MovePiece(originalPosition, *iter);
+		if (CheckForCheck(whoseTurnIsIt ^ 1))
+		{
+			toDelete.insert(*iter);
+//			possibleMoves.erase(*iter);
+			inCheck = true;
+		}
+		UndoLastMove();
+		iter++;
+	}
+
+	unordered_set<BoardPosition>::iterator deleteIter = toDelete.begin();
+	unordered_set<BoardPosition>::iterator deleteIterEnd = toDelete.end();
+
+	while (deleteIter != deleteIterEnd)
+	{
+		possibleMoves.erase(*deleteIter);
+		deleteIter++;
+	}
+
+	return inCheck;
+}
+
+bool Facade::CheckForCheckmate(const int colorToCheck)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			Piece * tempPiece = boardPtr->GetPiece(BoardPosition(i, j));
+			unordered_set<BoardPosition> possibleMoves =
+					GetValidMoves(BoardPosition(i, j));
+			if (tempPiece != NULL
+					&& tempPiece->GetColor() == colorToCheck
+					&& !possibleMoves.empty())
+			{
+				return false;
+			}
+		}
+	}
+
+	if (CheckForCheck(colorToCheck))
+	{
+		checkmate = true;
+		return true;
+	}
+	else
+	{
+		stalemate = true;
+		return false;
+	}
 }
 
 Piece * Facade::MovePiece(const BoardPosition & moveFrom, const BoardPosition & moveTo)
 {
-	assert (!(moveFrom == moveTo));
+	//assert (!(moveFrom == moveTo));
 
 	Piece * pieceToMove = boardPtr->GetPiece(moveFrom);
 	Piece * capturedPiece = boardPtr->GetPiece(moveTo);
@@ -354,6 +535,7 @@ Move Facade::UndoLastMove()
 	}
 
 	SwitchTurns();
+	checkmate = stalemate = false;
 	return lastMove;
 }
 
@@ -364,13 +546,44 @@ void Facade::SwitchTurns()
 
 void Facade::SaveGameAs(const string & fileName)
 {
-	gameSaver = new GameSaver(fileName);
-	gameSaver->SaveGameAs(fileName, boardPtr, gameHistory);
+	if (fileName != "")
+	{
+		gameSaver = new GameSaver(fileName);
+		gameSaver->SaveGameAs(fileName, boardPtr, gameHistory);
+	}
 }
 
-void Facade::SameGame() const
+bool Facade::SaveGame() const
 {
-	gameSaver->SaveGame(boardPtr, gameHistory);
+	if (gameSaver != NULL)
+	{
+		gameSaver->SaveGame(boardPtr, gameHistory);
+		return true;
+	}
+
+	return false;
+}
+
+bool Facade::AnyMovesMadeYet() const
+{
+	return !gameHistory->IsEmpty();
+}
+
+int Facade::WhoseTurnIsIt() const
+{
+	return whoseTurnIsIt;
+}
+
+bool Facade::ShouldIHighlighThisCell(const BoardPosition & positionToCheck) const
+{
+	Piece * tempPiece = boardPtr->GetPiece(positionToCheck);
+	if (tempPiece == NULL
+			|| checkmate
+			|| stalemate)
+	{
+		return false;
+	}
+	return tempPiece->GetColor() == whoseTurnIsIt;
 }
 
 #ifndef NDEBUG
@@ -381,7 +594,43 @@ bool Facade::Test(ostream & os)
 	Facade testFacade;
 	testFacade.NewGame();
 
-	TEST(testFacade.MovePiece(BoardPosition(1,0), BoardPosition(2,0)) == testFacade.boardPtr->GetPiece(BoardPosition(2,0)));
+	TEST(testFacade.MovePiece(BoardPosition(6,5), BoardPosition(5,5)) == testFacade.boardPtr->GetPiece(BoardPosition(5,5)));
+	TEST(testFacade.MovePiece(BoardPosition(1,4), BoardPosition(2,4)) == testFacade.boardPtr->GetPiece(BoardPosition(2,4)));
+	TEST(testFacade.MovePiece(BoardPosition(6,2), BoardPosition(5,2)) == testFacade.boardPtr->GetPiece(BoardPosition(5,2)));
+	TEST(testFacade.MovePiece(BoardPosition(0,3), BoardPosition(4,7)) == testFacade.boardPtr->GetPiece(BoardPosition(4,7)));
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(4,7))->GetType() == Piece::QUEEN);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(4,7))->GetColor() == Piece::BLACK);
+	TEST(testFacade.MovePiece(BoardPosition(6,6), BoardPosition(5,6)) == testFacade.boardPtr->GetPiece(BoardPosition(5,6)));
+	TEST(testFacade.MovePiece(BoardPosition(4,7), BoardPosition(5,6)) == testFacade.boardPtr->GetPiece(BoardPosition(5,6)));
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(6,7))->GetType() == Piece::PAWN);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(6,7))->GetColor() == Piece::WHITE);
+
+	unordered_set<BoardPosition> cornerPawnCheck = {BoardPosition(5,6)};
+	unordered_set<BoardPosition> cornerPawnCheck1 = testFacade.GetValidMoves(BoardPosition(6,7));
+	TEST(testFacade.WillKingBeInCheck(BoardPosition(6,7), cornerPawnCheck1) == false);
+	TEST(testFacade.GetValidMoves(BoardPosition(6,7)) == cornerPawnCheck);
+
+	testFacade.NewGame();
+	testFacade.MovePiece(BoardPosition(6,4), BoardPosition(4,4));
+	testFacade.MovePiece(BoardPosition(1,4), BoardPosition(3,4));
+	testFacade.MovePiece(BoardPosition(7,4), BoardPosition(6,4));
+	testFacade.MovePiece(BoardPosition(0,4), BoardPosition(1,4));
+	testFacade.MovePiece(BoardPosition(6,4), BoardPosition(5,3));
+	testFacade.MovePiece(BoardPosition(1,4), BoardPosition(2,5));
+	testFacade.MovePiece(BoardPosition(5,3), BoardPosition(4,2));
+	testFacade.MovePiece(BoardPosition(2,5), BoardPosition(3,6));
+	testFacade.MovePiece(BoardPosition(4,2), BoardPosition(3,3));
+	testFacade.MovePiece(BoardPosition(3,6), BoardPosition(4,5));
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(3,4))->GetType() == Piece::PAWN);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(3,4))->GetColor() == Piece::BLACK);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(3,3))->GetType() == Piece::KING);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(3,3))->GetColor() == Piece::WHITE);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(4,5))->GetType() == Piece::KING);
+	TEST(testFacade.boardPtr->GetPiece(BoardPosition(4,5))->GetColor() == Piece::BLACK);
+
+	unordered_set<BoardPosition> kingCheck1 = testFacade.GetValidMoves(BoardPosition(3,3));
+	unordered_set<BoardPosition> kingCheck2 = {BoardPosition(4,2)};
+	TEST(kingCheck1 == kingCheck2);
 
 	return success;
 }

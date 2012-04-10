@@ -22,15 +22,19 @@ public:
 	Facade();
 	~Facade();
 	void NewGame();
-	std::unordered_set<BoardPosition> GetValidMoves(const BoardPosition &) const;
-	bool CheckForCheck() const;
-	bool WillKingBeInCheck(const std::unordered_set<BoardPosition> &) const;
-	bool CheckForCheckMate(const std::unordered_set<BoardPosition> &) const;
+	std::unordered_set<BoardPosition> GetValidMoves(const BoardPosition &);
+	bool CheckForCheck(int) const;
+	bool WillKingBeInCheck(const BoardPosition &, std::unordered_set<BoardPosition> &);
+	bool CheckForCheckmate(const int);
 	Piece * MovePiece(const BoardPosition &, const BoardPosition &);
 	Move UndoLastMove();
 	void SwitchTurns();
 	void SaveGameAs(const std::string &);
-	void SameGame() const;
+	bool SaveGame() const;
+	bool Checkmate();
+	bool AnyMovesMadeYet() const;
+	int WhoseTurnIsIt() const;
+	bool ShouldIHighlighThisCell(const BoardPosition &) const;
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);
@@ -41,12 +45,15 @@ private:
 	int whoseTurnIsIt;
 	MoveHistory * gameHistory;
 	GameSaver * gameSaver;
+	bool checkmate;
+	bool stalemate;
 
-	bool CheckStraight(BoardPosition &) const;
-	bool CheckForStraightAttack(const Piece *) const;
-	bool CheckDiagonal(BoardPosition &) const;
-	bool CheckForDiagonalAttack(const Piece *) const;
-	bool CheckKnightPositions(BoardPosition &) const;
+	bool CheckStraight(BoardPosition &, const int) const;
+	bool CheckForStraightAttack(const Piece *, const int) const;
+	bool CheckDiagonal(BoardPosition &, const int) const;
+	bool CheckForDiagonalAttack(const Piece *, const int) const;
+	bool CheckKnightPositions(BoardPosition &, const int) const;
+	bool CheckKingPositions(BoardPosition &, const int) const;
 };
 
 #endif /* FACADE_H_ */

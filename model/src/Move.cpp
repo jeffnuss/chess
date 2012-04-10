@@ -71,7 +71,7 @@ int Move::GetCapturedPieceType() const
 
 int Move::GetCapturedPieceColor() const
 {
-	return (pieceType == Piece::BLACK ? Piece::WHITE : Piece::BLACK);
+	return (pieceColor == Piece::BLACK ? Piece::WHITE : Piece::BLACK);
 }
 
 BoardPosition Move::GetCapturedPiecePosition() const

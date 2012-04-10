@@ -23,7 +23,8 @@ public:
 	std::string GetPieceTypeString(const int) const;
 	std::string GetPieceColorString(const int) const;
 	void OutputHistory(const MoveHistory *, std::ofstream &) const;
-	std::string PiecePrinter(std::ofstream &, const Piece *, const int, const int) const;
+	void PiecePrinter(std::ofstream &, const Piece *, const int, const int) const;
+	void PiecePrinter(std::ofstream &, const int, const int, const int, const int) const;
 
 private:
 	std::string fileName;

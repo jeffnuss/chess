@@ -20,8 +20,9 @@ public:
 	Move & GetFirstMove();
 	Move DeleteLastMove();
 	void Clear();
-	const std::deque<Move>::iterator GetFrontIterator() const;
-	const std::deque<Move>::iterator GetBackIterator() const;
+	std::deque<Move>::const_reverse_iterator GetReverseFrontIterator() const;
+	std::deque<Move>::const_reverse_iterator GetReverseBackIterator() const;
+	bool IsEmpty() const;
 
 private:
 	std::deque<Move> moveHistory;

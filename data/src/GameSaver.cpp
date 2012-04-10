@@ -54,12 +54,8 @@ void GameSaver::OutputBoard(const Board * boardPtr, ofstream & outputFile) const
 			Piece * pieceToPrint = boardPtr->GetPiece(BoardPosition(i, j));
 			if (pieceToPrint != NULL)
 			{
-				outputFile << "\t\t" << "<piece type = \""
-						<< GetPieceTypeString(pieceToPrint->GetType())
-						<< "\" color = \"" << GetPieceColorString(pieceToPrint->GetColor())
-						<< "\" column = \"" << j
-						<< "\" row = \"" << i
-						<< "\"/>" << endl;
+				outputFile << "\t\t";
+				PiecePrinter(outputFile, pieceToPrint, i, j);
 			}
 		}
 	}
@@ -103,21 +99,47 @@ string GameSaver::GetPieceColorString(const int pieceColor) const
 	}
 }
 
-string GameSaver::PiecePrinter(ofstream & outputFile, const Piece * pieceToPrint, const int row, const int col) const
+void GameSaver::PiecePrinter(ofstream & outputFile, const Piece * pieceToPrint, const int row, const int col) const
 {
+	outputFile << "<piece type = \""
+			<< GetPieceTypeString(pieceToPrint->GetType())
+			<< "\" color = \"" << GetPieceColorString(pieceToPrint->GetColor())
+			<< "\" column = \"" << col
+			<< "\" row = \"" << row
+			<< "\"/>" << endl;
+}
 
+void GameSaver::PiecePrinter(ofstream & outputFile, const int pieceType, const int pieceColor, const int row, const int col) const
+{
+	outputFile << "<piece type = \""
+			<< GetPieceTypeString(pieceType)
+			<< "\" color = \"" << GetPieceColorString(pieceColor)
+			<< "\" column = \"" << col
+			<< "\" row = \"" << row
+			<< "\"/>" << endl;
 }
 
 void GameSaver::OutputHistory(const MoveHistory * gameHistory, ofstream & outputFile) const
 {
-	deque<Move>::iterator iter = gameHistory->GetFrontIterator();
-	deque<Move>::iterator endIter = gameHistory->GetBackIterator();
+	// Iterate in reverse order
+	deque<Move>::const_reverse_iterator startIter = gameHistory->GetReverseFrontIterator();
+	deque<Move>::const_reverse_iterator endIter = gameHistory->GetReverseBackIterator();
 
-	while (iter != gameHistory)
+	while (startIter != endIter)
 	{
 		outputFile << "\t\t" << "<move>" << endl;
-		outputFile << "\t\t\t" << ""
-		iter++;
+		outputFile << "\t\t\t";
+		PiecePrinter(outputFile, startIter->GetPieceType(), startIter->GetPieceColor(),
+				startIter->GetOriginPosition().GetRow(), startIter->GetOriginPosition().GetCol());
+		PiecePrinter(outputFile, startIter->GetPieceType(), startIter->GetPieceColor(),
+				startIter->GetDestinationPosition().GetRow(), startIter->GetDestinationPosition().GetCol());
+		if (startIter->GetCapturedPieceType() != -1)
+		{
+			PiecePrinter(outputFile, startIter->GetCapturedPieceType(), startIter->GetCapturedPieceColor(),
+					startIter->GetCapturedPiecePosition().GetRow(), startIter->GetCapturedPiecePosition().GetCol());
+		}
+		outputFile << "\t\t" << "</move>" << endl;
+		startIter++;
 	}
 }
 
