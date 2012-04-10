@@ -27,13 +27,13 @@ using namespace std;
 void connectController(ChessView& view, IChessController ** cont, int argc, char ** argv)
 {
 	// 1. Process command-line args
-	// TODO: Process command-line args
 	// 2. Initialize controller. This is tricky because it's a double pointer.
 	// Example:
 	//		(*cont) = new MyController(parameters);
 
-	(*cont) = new ChessController;
- 
+	view.SetTimeoutMilliseconds(500);
+	(*cont) = new ChessController(argv[1][0]);
+
 	// 3. Connect the view and controller using the IChessController::SetView 
 	// and IChessView::SetController methods
 	(*cont)->SetView(&view);

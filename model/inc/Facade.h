@@ -5,6 +5,9 @@
  *      Author: jnuss
  */
 
+#ifndef FACADE_H_
+#define FACADE_H_
+
 #include <unordered_set>
 #include <iostream>
 
@@ -14,9 +17,6 @@
 #include "../../data/inc/GameSaver.h"
 #include "../../data/inc/GameLoader.h"
 #include "../../test/inc/UnitTest.h"
-
-#ifndef FACADE_H_
-#define FACADE_H_
 
 class Facade {
 public:

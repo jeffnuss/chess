@@ -8,22 +8,60 @@
 #include <unordered_set>
 
 #include "../inc/ChessController.h"
+#include "HumanPlayer.h"
+#include "ComputerPlayer.h"
 
 using namespace std;
 
-ChessController::ChessController()
+ChessController::ChessController(char argv)
 {
 	facadePtr = new Facade;
 	currentSelectedCell = BoardPosition(-1, -1);
+
+	if (argv == '0')
+	{
+		whitePlayer = new HumanPlayer(Piece::WHITE, facadePtr, this);
+		blackPlayer = new HumanPlayer(Piece::BLACK, facadePtr, this);
+	}
+
+	if (argv == '1')
+	{
+		whitePlayer = new HumanPlayer(Piece::WHITE, facadePtr, this);
+		blackPlayer = new ComputerPlayer(Piece::BLACK, facadePtr, this);
+	}
+
+	if (argv == '2')
+	{
+		whitePlayer = new ComputerPlayer(Piece::WHITE, facadePtr, this);
+		blackPlayer = new HumanPlayer(Piece::BLACK, facadePtr, this);
+	}
+
+	if (argv == '3')
+	{
+		whitePlayer = new ComputerPlayer(Piece::WHITE, facadePtr, this);
+		blackPlayer = new ComputerPlayer(Piece::BLACK, facadePtr, this);
+	}
 }
 
 ChessController::~ChessController()
 {
 	delete facadePtr;
+	delete whitePlayer;
+	delete blackPlayer;
 }
 
 void ChessController::on_CellSelected(int row, int col, int button)
 {
+//	if (facadePtr->WhoseTurnIsIt() == Piece::BLACK)
+//	{
+//		blackPlayer->on_CellSelected(row, col, button);
+//	}
+//	else
+//	{
+//		whitePlayer->on_CellSelected(row, col, button);
+//	}
+
+
 	BoardPosition newSelectedCell(row, col);
 	currentHighlightedCells.erase(currentSelectedCell);
 
@@ -293,7 +331,14 @@ void ChessController::on_QuitGame()
 
 void ChessController::on_TimerEvent()
 {
-
+	if (facadePtr->WhoseTurnIsIt() == Piece::BLACK)
+	{
+		blackPlayer->on_TimerEvent();
+	}
+	else
+	{
+		whitePlayer->on_TimerEvent();
+	}
 }
 
 void ChessController::SetView(IChessView* view)

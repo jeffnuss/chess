@@ -603,6 +603,11 @@ bool Facade::Stalemate() const
 	return stalemate;
 }
 
+bool Facade::Checkmate() const
+{
+	return checkmate;
+}
+
 Piece * Facade::GetPiece(const BoardPosition & positionToGet) const
 {
 	return boardPtr->GetPiece(positionToGet);

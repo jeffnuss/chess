@@ -81,6 +81,8 @@ MEMMAIN_O = $(CONT_OBJ)memcheck_main.o
 # This macro should be used to store all of the object files created 
 # from *your* source files
 MY_OBJS =  $(CONT_OBJ)ChessController.o \
+	$(CONT_OBJ)HumanPlayer.o \
+	$(CONT_OBJ)ComputerPlayer.o \
 	$(foreach file, $(MODEL_SOURCES), $(MODEL_OBJ)$(file).o) \
 	$(foreach file, $(DATA_SOURCES), $(DATA_OBJ)$(file).o)
 	#$(MODEL_OBJ)Facade.o \
@@ -114,10 +116,21 @@ LIB_OBJS = $(VIEW_OBJ)ChessView.o \
 ################################################################################
 # Pseudo-targets
 
-run: $(EXE) 
+runhh: $(EXE) 
 	ulimit -c unlimited
-	$(EXE)
+	$(EXE) 0
 
+runhc: $(EXE) 
+	ulimit -c unlimited
+	$(EXE) 1
+
+runch: $(EXE) 
+	ulimit -c unlimited
+	$(EXE) 2
+
+runcc: $(EXE) 
+	ulimit -c unlimited
+	$(EXE) 3
 test: $(TEST)
 	ulimit -c unlimited
 	$(TEST)
@@ -130,7 +143,7 @@ lib: $(LIB)
 # memory-check executable in Human-Human mode (i.e., add necessary command  
 # line arguments to the end of valgrind the command below).	
 memcheck: $(MEXE)
-	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) hh
+	valgrind --tool=memcheck --leak-check=yes --max-stackframe=5000000 --show-reachable=yes --suppressions=string.supp $(MEXE) 0
 
 # Clean removes all of the .o files, libraries, and executables
 clean:
@@ -200,6 +213,8 @@ depend: depend.mk
 	@for f in $(MODEL_SOURCES) ; do g++ -MM -MT $(MODEL_OBJ)$$f.o -I $(MODEL_INC) $(AWESOMENESS_FLAG) $(MODEL_SRC)$$f.cpp >> depend.mk; done
 	@for f in $(DATA_SOURCES) ; do g++ -MM -MT $(DATA_OBJ)$$f.o -I $(DATA_INC) $(AWESOMENESS_FLAG) $(DATA_SRC)$$f.cpp >> depend.mk; done
 	@g++ -MM -MT $(CONT_OBJ)ChessController.o -I $(CONT_INC) $(AWESOMENESS_FLAG) $(CONT_SRC)ChessController.cpp >> depend.mk
+	@g++ -MM -MT $(CONT_OBJ)HumanPlayer.o -I $(CONT_INC) $(AWESOMENESS_FLAG) $(CONT_SRC)HumanPlayer.cpp >> depend.mk
+	@g++ -MM -MT $(CONT_OBJ)ComputerPlayer.o -I $(CONT_INC) $(AWESOMENESS_FLAG) $(CONT_SRC)ComputerPlayer.cpp >> depend.mk
 
 $(TEST_OBJ)Tester.o: $(TEST_SRC)Tester.cpp $(LIB)
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(TEST_O) -c $(LOG_FLAG) $(TEST_SRC)Tester.cpp
@@ -213,8 +228,14 @@ $(DATA_OBJ)%.o : $(DATA_SRC)%.cpp
 $(CONT_OBJ)ChessController.o: $(CONT_SRC)ChessController.cpp $(CONT_INC)ChessController.h $(MODEL_INC)Facade.h
 	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(CONT_OBJ)ChessController.o -c $(LOG_FLAG) $(CONT_SRC)ChessController.cpp
 
-include depend.mk
+$(CONT_OBJ)HumanPlayer.o: $(CONT_SRC)HumanPlayer.cpp $(CONT_INC)HumanPlayer.h $(CONT_INC)IChessPlayer.h 
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(CONT_OBJ)HumanPlayer.o -c $(LOG_FLAG) $(CONT_SRC)HumanPlayer.cpp
 
+$(CONT_OBJ)ComputerPlayer.o: $(CONT_SRC)ComputerPlayer.cpp $(CONT_INC)ComputerPlayer.h $(CONT_INC)IChessPlayer.h 
+	g++ $(DEBUG) $(INCLUDES) $(CFLAGS) $(AWESOMENESS_FLAG) $(LIBS) -o $(CONT_OBJ)ComputerPlayer.o -c $(LOG_FLAG) $(CONT_SRC)ComputerPlayer.cpp
+
+
+include depend.mk
 ################################################################################
 # Targets for GUI-related object files
 # Instructions: These will have to be recompiled as position-independent code, 

@@ -5,20 +5,21 @@
  *      Author: jnuss
  */
 
+#ifndef CHESSCONTROLLER_H_
+#define CHESSCONTROLLER_H_
+
 #include <unordered_set>
 
 #include "IChessController.h"
 #include "../../view/inc/IChessView.h"
 #include "../../model/inc/Facade.h"
 #include "../../model/inc/BoardPosition.h"
-
-#ifndef CHESSCONTROLLER_H_
-#define CHESSCONTROLLER_H_
+#include "HumanPlayer.h"
 
 class ChessController : public IChessController
 {
 public:
-	ChessController();
+	ChessController(char);
 	~ChessController();
 
 	void on_CellSelected(int row, int col, int button);
@@ -43,6 +44,8 @@ private:
 	Facade * facadePtr;
 	std::unordered_set<BoardPosition> currentHighlightedCells;
 	BoardPosition currentSelectedCell;
+	IChessPlayer * whitePlayer;
+	IChessPlayer * blackPlayer;
 
 };
 

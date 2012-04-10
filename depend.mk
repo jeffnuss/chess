@@ -15,6 +15,11 @@ model/obj/Facade.o: model/src/Facade.cpp model/src/../inc/Facade.h \
  model/src/../inc/../../data/inc/../../model/inc/Board.h \
  model/src/../inc/../../data/inc/../../model/inc/MoveHistory.h \
  model/src/../inc/../../data/inc/../../model/inc/Move.h \
+ model/src/../inc/../../data/inc/GameLoader.h \
+ model/src/../inc/../../data/inc/URLInputStream.h \
+ model/src/../inc/../../data/inc/InputStream.h \
+ model/src/../inc/../../data/inc/HTMLTokenizer.h \
+ model/src/../inc/../../data/inc/HTMLToken.h \
  model/src/../inc/../../test/inc/UnitTest.h
 model/obj/King.o: model/src/King.cpp model/src/../inc/King.h \
  model/src/../inc/Piece.h model/src/../inc/BoardPosition.h \
@@ -47,10 +52,11 @@ data/obj/GameLoader.o: data/src/GameLoader.cpp \
  data/src/../inc/../../model/inc/Move.h \
  data/src/../inc/../../model/inc/Piece.h \
  data/src/../inc/../../model/inc/BoardPosition.h \
- data/src/../inc/CS240Exception.h data/src/../inc/URLInputStream.h \
- data/src/../inc/InputStream.h data/src/../inc/HTMLToken.h \
- data/src/../inc/HTMLTokenizer.h data/src/../inc/URLInputStream.h \
- data/src/../inc/HTMLToken.h data/src/../inc/HTTPInputStream.h
+ data/src/../inc/../../model/inc/Board.h data/src/../inc/URLInputStream.h \
+ data/src/../inc/InputStream.h data/src/../inc/HTMLTokenizer.h \
+ data/src/../inc/HTMLToken.h data/src/../inc/CS240Exception.h \
+ data/src/../inc/URLInputStream.h data/src/../inc/HTMLToken.h \
+ data/src/../inc/HTMLTokenizer.h
 data/obj/GameSaver.o: data/src/GameSaver.cpp data/src/../inc/GameSaver.h \
  data/src/../inc/../../model/inc/Board.h \
  data/src/../inc/../../model/inc/Piece.h \
@@ -89,5 +95,17 @@ controller/obj/ChessController.o: controller/src/ChessController.cpp \
  controller/src/../inc/../../model/inc/../../data/inc/../../model/inc/Board.h \
  controller/src/../inc/../../model/inc/../../data/inc/../../model/inc/MoveHistory.h \
  controller/src/../inc/../../model/inc/../../data/inc/../../model/inc/Move.h \
+ controller/src/../inc/../../model/inc/../../data/inc/GameLoader.h \
+ controller/src/../inc/../../model/inc/../../data/inc/URLInputStream.h \
+ controller/src/../inc/../../model/inc/../../data/inc/InputStream.h \
+ controller/src/../inc/../../model/inc/../../data/inc/HTMLTokenizer.h \
+ controller/src/../inc/../../model/inc/../../data/inc/HTMLToken.h \
  controller/src/../inc/../../model/inc/../../test/inc/UnitTest.h \
- controller/src/../inc/../../model/inc/BoardPosition.h
+ controller/src/../inc/../../model/inc/BoardPosition.h \
+ controller/src/../inc/HumanPlayer.h controller/src/../inc/IChessPlayer.h \
+ controller/inc/HumanPlayer.h
+controller/obj/HumanPlayer.o: controller/src/HumanPlayer.cpp \
+ controller/src/../inc/HumanPlayer.h controller/src/../inc/IChessPlayer.h
+controller/obj/ComputerPlayer.o: controller/src/ComputerPlayer.cpp \
+ controller/src/../inc/ComputerPlayer.h \
+ controller/src/../inc/IChessPlayer.h
