@@ -32,12 +32,13 @@ public:
 	void SwitchTurns();
 	void SaveGameAs(const std::string &);
 	bool SaveGame() const;
-	bool LoadGame(const std::string &) const;
+	bool LoadGame(const std::string &);
 	bool Checkmate() const;
 	bool Stalemate() const;
 	bool AnyMovesMadeYet() const;
 	int WhoseTurnIsIt() const;
 	bool ShouldIHighlighThisCell(const BoardPosition &) const;
+	Piece * GetPiece(const BoardPosition &) const;
 
 #ifndef NDEBUG
 	static bool Test(std::ostream &);

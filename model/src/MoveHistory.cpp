@@ -50,4 +50,7 @@ bool MoveHistory::IsEmpty() const
 	return moveHistory.empty();
 }
 
-
+int MoveHistory::WhoMadeTheLastMove() const
+{
+	return moveHistory.front().GetPieceColor();
+}

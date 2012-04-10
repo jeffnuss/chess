@@ -23,6 +23,7 @@ public:
 	std::deque<Move>::const_reverse_iterator GetReverseFrontIterator() const;
 	std::deque<Move>::const_reverse_iterator GetReverseBackIterator() const;
 	bool IsEmpty() const;
+	int WhoMadeTheLastMove() const;
 
 private:
 	std::deque<Move> moveHistory;

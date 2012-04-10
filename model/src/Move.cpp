@@ -44,6 +44,18 @@ Move::Move(const Piece * movedPiece, const BoardPosition & moveFrom,
 {
 }
 
+Move::Move(const int movedPieceType, const int movedPieceColor, const BoardPosition & moveFrom,
+		const BoardPosition & moveTo, const int capturedPieceType,
+		const BoardPosition & caputuredPiecePosition)
+		: pieceType(movedPieceType),
+		  pieceColor(movedPieceColor),
+		  moveFrom(moveFrom),
+		  moveTo(moveTo),
+		  capturedPieceType(capturedPieceType),
+		  caputuredPiecePosition(caputuredPiecePosition)
+{
+}
+
 int Move::GetPieceType() const
 {
 	return pieceType;

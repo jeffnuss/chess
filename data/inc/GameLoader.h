@@ -10,12 +10,20 @@
 
 #include "../../model/inc/MoveHistory.h"
 #include "../../model/inc/Board.h"
+#include  "URLInputStream.h"
+#include "HTMLTokenizer.h"
 
 class GameLoader {
 public:
 	GameLoader();
 	~GameLoader();
-	MoveHistory LoadGame(const std::string &, Board *, MoveHistory *) const;
+	void LoadGame(const std::string &, Board *, MoveHistory *) const;
+	void LoadBoard(HTMLTokenizer &, Board *) const;
+	void LoadMoveHistory(HTMLTokenizer &, MoveHistory *) const;
+
+private:
+	int ConvertTypeStrToInt(const std::string &) const;
+	int ConvertColorStrToInt(const std::string &) const;
 
 };
 

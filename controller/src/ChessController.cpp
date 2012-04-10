@@ -34,23 +34,7 @@ void ChessController::on_CellSelected(int row, int col, int button)
 		MovePiece(currentSelectedCell, newSelectedCell, pieceToMove);
 		ClearCurrentHighlights();
 		currentHighlightedCells.clear();
-
-		if (facadePtr->CheckForCheckmate(facadePtr->WhoseTurnIsIt()))
-		{
-			viewPtr->SetStatusBar("Checkmate");
-		}
-		else if (facadePtr->CheckForCheck(facadePtr->WhoseTurnIsIt()))
-		{
-			viewPtr->SetStatusBar("Check");
-		}
-		else if (facadePtr->Stalemate())
-		{
-			viewPtr->SetStatusBar("Stalemate");
-		}
-		else
-		{
-			viewPtr->SetStatusBar("");
-		}
+		UpdateGameStatus();
 	}
 
 	else
@@ -58,6 +42,26 @@ void ChessController::on_CellSelected(int row, int col, int button)
 		HighlightMoves(newSelectedCell);
 	}
 	currentSelectedCell = newSelectedCell;
+}
+
+void ChessController::UpdateGameStatus()
+{
+	if (facadePtr->CheckForCheckmate(facadePtr->WhoseTurnIsIt()))
+	{
+		viewPtr->SetStatusBar("Checkmate");
+	}
+	else if (facadePtr->CheckForCheck(facadePtr->WhoseTurnIsIt()))
+	{
+		viewPtr->SetStatusBar("Check");
+	}
+	else if (facadePtr->Stalemate())
+	{
+		viewPtr->SetStatusBar("Stalemate");
+	}
+	else
+	{
+		viewPtr->SetStatusBar("");
+	}
 }
 
 void ChessController::HighlightMoves(const BoardPosition & positionToCheck)
@@ -223,7 +227,23 @@ void ChessController::on_SaveGameAs()
 
 void ChessController::on_LoadGame()
 {
+	string filePath = viewPtr->SelectLoadFile();
+	facadePtr->LoadGame(filePath);
 
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			viewPtr->ClearPiece(i,j);
+			Piece * pieceToCheck = facadePtr->GetPiece(BoardPosition(i, j));
+			if (pieceToCheck != NULL)
+			{
+				viewPtr->PlacePiece(i, j, GetPieceImage(pieceToCheck->GetColor(),
+						pieceToCheck->GetType()));
+			}
+		}
+	}
+	UpdateGameStatus();
 }
 
 void ChessController::on_UndoMove()

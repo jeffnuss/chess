@@ -36,6 +36,7 @@ public:
 	void ClearCurrentHighlights();
 	void MovePiece(const BoardPosition &, const BoardPosition, const Piece *);
 	ImageName GetPieceImage(const int, const int) const;
+	void UpdateGameStatus();
 
 private:
 	IChessView * viewPtr;

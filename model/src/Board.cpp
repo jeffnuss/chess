@@ -133,6 +133,14 @@ Piece * Board::SetPiece(const BoardPosition & positionToSet, const int pieceType
 		break;
 	case Piece::KING:
 		boardArray[positionToSet.GetRow()][positionToSet.GetCol()] = new King(pieceColor);
+		if (pieceColor == Piece::BLACK)
+		{
+			blackKingPosition = positionToSet;
+		}
+		else
+		{
+			whiteKingPosition = positionToSet;
+		}
 		break;
 	}
 	return boardArray[positionToSet.GetRow()][positionToSet.GetCol()];

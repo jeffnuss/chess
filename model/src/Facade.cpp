@@ -563,16 +563,16 @@ bool Facade::SaveGame() const
 	return false;
 }
 
-bool Facade::LoadGame(const string & filePath) const
+bool Facade::LoadGame(const string & filePath)
 {
 	NewGame();
 	delete boardPtr;
 	boardPtr = new Board();
 	GameLoader * loader = new GameLoader();
 	loader->LoadGame(filePath, boardPtr, gameHistory);
-
-
-
+	whoseTurnIsIt = gameHistory->WhoMadeTheLastMove() ^ 1;
+	CheckForCheckmate(whoseTurnIsIt);
+	return true;
 }
 
 
@@ -601,6 +601,11 @@ bool Facade::ShouldIHighlighThisCell(const BoardPosition & positionToCheck) cons
 bool Facade::Stalemate() const
 {
 	return stalemate;
+}
+
+Piece * Facade::GetPiece(const BoardPosition & positionToGet) const
+{
+	return boardPtr->GetPiece(positionToGet);
 }
 
 #ifndef NDEBUG
