@@ -6,7 +6,7 @@
  */
 
 #include "../inc/Pawn.h"
-#include "../../test/inc/UnitTest.h"
+#include "UnitTest.h"
 
 using namespace std;
 
@@ -115,7 +115,8 @@ bool Pawn::Test(ostream & os)
 	TEST(testPawn.ThereIsAPieceInMyWay(BoardPosition(5, 3), testBoard) == false);
 	TEST(testPawn.ThereIsAPieceInMyWay(BoardPosition(6, 3), testBoard) == true);
 	
-	testBoard->SetPiece(BoardPosition(5, 3), Piece::PAWN, Piece::BLACK);
+	testBoard->SetPiece(BoardPosition(5, 3), testBoard->GetPiece(BoardPosition(1, 3)));
+	testBoard->ClearCell(BoardPosition(1, 3));
 	unordered_set<BoardPosition> testMoves = testPawn.GetLegalMoves(BoardPosition(6, 4), testBoard);
 	unordered_set<BoardPosition> testMovesAnswer = {BoardPosition(5, 3), BoardPosition(5, 4), BoardPosition(4, 4)};
 	TEST(testMoves == testMovesAnswer);

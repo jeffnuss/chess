@@ -15,7 +15,12 @@ class King :public Piece
 {
 public:
 	King(const int);
-	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &, const Board *) const;
+	std::unordered_set<BoardPosition> GetLegalMoves(const BoardPosition &,
+			const Board *) const;
+
+#ifndef NDEBUG
+	static bool Test(std::ostream &);
+#endif
 };
 
 #endif /* KING_H_ */
