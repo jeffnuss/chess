@@ -24,6 +24,7 @@ public:
 private:
 	int ConvertTypeStrToInt(const std::string &) const;
 	int ConvertColorStrToInt(const std::string &) const;
+	void CheckForEndToken(const HTMLToken &) const;
 
 };
 

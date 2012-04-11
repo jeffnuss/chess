@@ -30,10 +30,10 @@ Facade::~Facade()
 void Facade::NewGame()
 {
 	boardPtr->Reset();
+	delete gameHistory;
+	gameHistory = new MoveHistory;
 	if (gameSaver != NULL)
 	{
-		delete gameHistory;
-		gameHistory = new MoveHistory;
 		delete gameSaver;
 		gameSaver = NULL;
 	}
@@ -565,6 +565,10 @@ bool Facade::SaveGame() const
 
 bool Facade::LoadGame(const string & filePath)
 {
+	if (filePath.find(".xml") == filePath.npos)
+	{
+		return false;
+	}
 	NewGame();
 	delete boardPtr;
 	boardPtr = new Board();

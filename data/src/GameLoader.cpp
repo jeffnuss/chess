@@ -54,12 +54,14 @@ void GameLoader::LoadBoard(HTMLTokenizer & tokenizer, Board * boardPtr) const
 	HTMLToken currentToken = tokenizer.GetNextToken();
 	while (currentToken.GetValue() != "board")
 	{
+		CheckForEndToken(currentToken);
 		currentToken = tokenizer.GetNextToken();
 	}
 
 	currentToken = tokenizer.GetNextToken();
 	while (currentToken.GetValue() != "board")
 	{
+		CheckForEndToken(currentToken);
 		if (currentToken.GetValue() == "piece")
 		{
 			int pieceType = ConvertTypeStrToInt(currentToken.GetAttribute("type"));
@@ -77,17 +79,20 @@ void GameLoader::LoadMoveHistory(HTMLTokenizer & tokenizer, MoveHistory * gameHi
 	HTMLToken currentToken = tokenizer.GetNextToken();
 	while (currentToken.GetValue() != "history")
 	{
+		CheckForEndToken(currentToken);
 		currentToken = tokenizer.GetNextToken();
 	}
 
 	currentToken = tokenizer.GetNextToken();
 	while (currentToken.GetValue() != "history")
 	{
+		CheckForEndToken(currentToken);
 		if (currentToken.GetValue() == "move"
 				&& currentToken.GetType() == HTMLTokenType::TAG_START)
 		{
 			while (currentToken.GetValue() != "piece")
 			{
+				CheckForEndToken(currentToken);
 				currentToken = tokenizer.GetNextToken();
 			}
 			HTMLToken origin = currentToken;
@@ -95,6 +100,7 @@ void GameLoader::LoadMoveHistory(HTMLTokenizer & tokenizer, MoveHistory * gameHi
 			currentToken = tokenizer.GetNextToken();
 			while (currentToken.GetValue() != "piece")
 			{
+				CheckForEndToken(currentToken);
 				currentToken = tokenizer.GetNextToken();
 			}
 			HTMLToken destination = currentToken;
@@ -114,6 +120,7 @@ void GameLoader::LoadMoveHistory(HTMLTokenizer & tokenizer, MoveHistory * gameHi
 			while (currentToken.GetValue() != "piece"
 					&& currentToken.GetValue() != "move")
 			{
+				CheckForEndToken(currentToken);
 				currentToken = tokenizer.GetNextToken();
 			}
 
@@ -133,6 +140,14 @@ void GameLoader::LoadMoveHistory(HTMLTokenizer & tokenizer, MoveHistory * gameHi
 		{
 			currentToken = tokenizer.GetNextToken();
 		}
+	}
+}
+
+void GameLoader::CheckForEndToken(const HTMLToken & tokenToCheck) const
+{
+	if (tokenToCheck.GetType() == HTMLTokenType::END)
+	{
+		throw CS240Exception("Invalid file");
 	}
 }
 

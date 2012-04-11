@@ -61,7 +61,26 @@ void ChessController::on_CellSelected(int row, int col, int button)
 //		whitePlayer->on_CellSelected(row, col, button);
 //	}
 
+	if (facadePtr->WhoseTurnIsIt() == Piece::BLACK)
+	{
+		HumanPlayer * test = dynamic_cast<HumanPlayer *>(blackPlayer);
+		if (test != 0)
+		{
+			CellSelected(row, col, button);
+		}
+	}
+	else
+	{
+		HumanPlayer * test = dynamic_cast<HumanPlayer *>(whitePlayer);
+		if (test != 0)
+		{
+			CellSelected(row, col, button);
+		}
+	}
+}
 
+void ChessController::CellSelected(int row, int col, int button)
+{
 	BoardPosition newSelectedCell(row, col);
 	currentHighlightedCells.erase(currentSelectedCell);
 
@@ -145,6 +164,8 @@ void ChessController::MovePiece(const BoardPosition & moveFrom, const BoardPosit
 	pieceToPlace = GetPieceImage(pieceColor, pieceType);
 
 	viewPtr->PlacePiece(moveTo.GetRow(), moveTo.GetCol(), pieceToPlace);
+
+	UpdateTurnDisplay();
 }
 
 ImageName ChessController::GetPieceImage(const int pieceColor, const int pieceType) const
@@ -247,6 +268,22 @@ void ChessController::on_NewGame()
 	viewPtr->PlacePiece(7, 4, W_KING);
 
 	facadePtr->NewGame();
+
+	UpdateTurnDisplay();
+	ClearCurrentHighlights();
+	UpdateGameStatus();
+}
+
+void ChessController::UpdateTurnDisplay()
+{
+	if (facadePtr->WhoseTurnIsIt() == Piece::BLACK)
+	{
+		viewPtr->SetTopLabel("Black's turn");
+	}
+	else
+	{
+		viewPtr->SetTopLabel("White's turn");
+	}
 }
 
 void ChessController::on_SaveGame()
@@ -266,8 +303,23 @@ void ChessController::on_SaveGameAs()
 void ChessController::on_LoadGame()
 {
 	string filePath = viewPtr->SelectLoadFile();
-	facadePtr->LoadGame(filePath);
+	if (filePath != "")
+	{
+		if (facadePtr->LoadGame(filePath))
+		{
+			LoadNewBoard();
+			UpdateTurnDisplay();
+		}
+		else
+		{
+			viewPtr->SetTopLabel("Invalid File");
+		}
+	}
 
+}
+
+void ChessController::LoadNewBoard()
+{
 	for (int i = 0; i < 8; i++)
 	{
 		for (int j = 0; j < 8; j++)
@@ -282,6 +334,7 @@ void ChessController::on_LoadGame()
 		}
 	}
 	UpdateGameStatus();
+	ClearCurrentHighlights();
 }
 
 void ChessController::on_UndoMove()
@@ -323,6 +376,8 @@ void ChessController::on_UndoMove()
 	{
 		viewPtr->SetStatusBar("No moves to undo");
 	}
+
+	UpdateTurnDisplay();
 }
 
 void ChessController::on_QuitGame()

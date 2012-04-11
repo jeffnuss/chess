@@ -37,17 +37,15 @@ void ComputerPlayer::on_TimerEvent()
 		int randomRow = rand() % 8;
 		int randomCol = rand() % 8;
 
-	//	Piece * tempPiece = facadePtr->GetPiece(BoardPosition(randomRow, randomCol));
 		unordered_set<BoardPosition> possibleMoves = facadePtr->GetValidMoves(BoardPosition(randomRow, randomCol));
 		while (possibleMoves.empty())
 		{
 			randomCol = rand() % 8;
 			randomRow = rand() % 8;
-	//		tempPiece = facadePtr->GetPiece(BoardPosition(randomRow, randomCol));
 			possibleMoves = facadePtr->GetValidMoves(BoardPosition(randomRow, randomCol));
 		}
 
-		controllerPtr->on_CellSelected(randomRow, randomCol, -1);
+		controllerPtr->CellSelected(randomRow, randomCol, -1);
 
 		int randomIndex = rand() % possibleMoves.size();
 
@@ -58,7 +56,7 @@ void ComputerPlayer::on_TimerEvent()
 		}
 
 		BoardPosition moveToMake = *iter;
-		controllerPtr->on_CellSelected(moveToMake.GetRow(), moveToMake.GetCol(), -1);
+		controllerPtr->CellSelected(moveToMake.GetRow(), moveToMake.GetCol(), -1);
 
 	}
 

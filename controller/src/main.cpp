@@ -107,7 +107,7 @@ void ChessGui_log_handler(const gchar *log_domain,
 int main(int argc,char ** argv)
 {
 
-	IChessController* controller = 0;	
+	IChessController* controller = 0;
 	
 	#ifndef MEMCHECK
 

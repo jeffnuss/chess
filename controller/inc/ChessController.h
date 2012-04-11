@@ -38,6 +38,9 @@ public:
 	void MovePiece(const BoardPosition &, const BoardPosition, const Piece *);
 	ImageName GetPieceImage(const int, const int) const;
 	void UpdateGameStatus();
+	void UpdateTurnDisplay();
+	void LoadNewBoard();
+	void CellSelected(int, int, int);
 
 private:
 	IChessView * viewPtr;
