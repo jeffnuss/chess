@@ -5,3 +5,4 @@ controller/obj/*
 lib/*
 test/obj/Tester.o
 core.*
+data/obj/*
